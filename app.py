@@ -244,7 +244,7 @@ def generate_pivot_insights(t):
 
 # ====== UI設計系統 ======
 def load_premium_design_system():
-    """載入頂級設計系統 - 修復HTML顯示問題"""
+    """載入頂級設計系統 - 純Streamlit組件版本"""
     st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -349,184 +349,42 @@ def load_premium_design_system():
             margin: 0;
         }
         
-        .metrics-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-            padding: 0 0.5rem;
-        }
-        
-        .metric-card {
+        /* Streamlit 指標卡片樣式 */
+        div[data-testid="metric-container"] {
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
         }
         
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        }
-        
-        .metric-card:hover {
+        div[data-testid="metric-container"]:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
         
-        .metric-label {
-            color: #64748b;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 1rem;
+        div[data-testid="metric-container"] > div {
+            color: #1e293b !important;
         }
         
-        .metric-value {
-            font-size: clamp(1.8rem, 6vw, 2.2rem);
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 0.8rem;
-            letter-spacing: -0.02em;
-        }
-        
-        .metric-change {
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-        }
-        
-        .metric-change.positive { color: #059669; }
-        .metric-change.negative { color: #dc2626; }
-        .metric-change.loading { color: #6b7280; }
-        
-        .stock-card {
+        /* 股票卡片樣式優化 */
+        .stock-info-card {
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            margin: 1rem 0.5rem;
+            margin: 1rem 0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
             border-left: 4px solid #3b82f6;
         }
         
-        .stock-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-        }
-        
-        .stock-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-        }
-        
-        .stock-symbol {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        
-        .stock-name {
-            color: #64748b;
-            font-size: 0.8rem;
-            margin-top: 0.2rem;
-        }
-        
-        .stock-price {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #0f172a;
-        }
-        
-        .stock-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 0.8rem;
-        }
-        
-        .stock-metric {
-            text-align: center;
-            padding: 0.8rem;
-            background: #f8fafc;
-            border-radius: 10px;
-        }
-        
-        .stock-metric-label {
-            font-size: 0.7rem;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        
-        .stock-metric-value {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        
-        .insight-card {
+        .insight-info-card {
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             border: 1px solid #bae6fd;
             border-radius: 16px;
             padding: 1.5rem;
-            margin: 1rem 0.5rem;
-            position: relative;
+            margin: 1rem 0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
-        
-        .insight-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            border-radius: 16px 16px 0 0;
-        }
-        
-        .insight-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0c4a6e;
-            margin-bottom: 1rem;
-        }
-        
-        .insight-content {
-            color: #164e63;
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            font-size: 0.9rem;
-        }
-        
-        .insight-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-            gap: 0.6rem;
-        }
-        
-        .insight-metric {
-            text-align: center;
-            padding: 0.6rem;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
         }
         
         /* 手機端優化 */
@@ -535,29 +393,12 @@ def load_premium_design_system():
                 padding: 0.5rem;
             }
             
-            .metrics-container {
-                grid-template-columns: 1fr;
-                gap: 0.8rem;
-            }
-            
-            .stock-metrics {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .insight-metrics {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .hero-section {
                 padding: 2rem 1rem;
             }
             
             .section-header {
                 padding: 1rem;
-            }
-            
-            .stock-card, .insight-card {
-                margin: 0.8rem 0;
             }
         }
         
@@ -573,16 +414,6 @@ def load_premium_design_system():
             
             .hero-section {
                 padding: 1.5rem 0.8rem;
-            }
-            
-            .metric-card {
-                padding: 1rem;
-            }
-            
-            .stock-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
             }
         }
     </style>
@@ -660,7 +491,7 @@ def language_selector(t):
             st.rerun()
 
 def create_market_data_section(market_data, t):
-    """創建市場數據區域"""
+    """創建市場數據區域 - 使用Streamlit原生組件避免HTML問題"""
     st.markdown(f"""
     <div class="section-header">
         <h2>📊 {t['real_time_market']}</h2>
@@ -670,53 +501,75 @@ def create_market_data_section(market_data, t):
     
     indices = market_data['indices']
     
-    # 創建指標卡片
-    metrics_html = '<div class="metrics-container">'
+    # 使用Streamlit原生的columns和metric組件
+    col1, col2, col3, col4 = st.columns(4)
     
-    for name, data in indices.items():
+    # S&P 500
+    with col1:
+        data = indices['SP500']
         if data['value'] is not None:
-            change_class = "positive" if data['change'] >= 0 else "negative"
-            change_symbol = "+" if data['change'] >= 0 else ""
-            change_icon = "↗" if data['change'] >= 0 else "↘"
-            
-            display_name = {
-                'SP500': 'S&P 500',
-                'NASDAQ': 'NASDAQ',
-                'DJI': '道瓊指數',
-                'BTC': 'Bitcoin'
-            }.get(name, name)
-            
-            metrics_html += f"""
-            <div class="metric-card">
-                <div class="metric-label">{display_name}</div>
-                <div class="metric-value">{data['value']:,.2f}</div>
-                <div class="metric-change {change_class}">
-                    <span>{change_icon}</span>
-                    {change_symbol}{data['change']:.2f} ({change_symbol}{data['change_pct']:.2%})
-                </div>
-            </div>
-            """
+            st.metric(
+                label="S&P 500",
+                value=f"{data['value']:,.2f}",
+                delta=f"{data['change']:.2f} ({data['change_pct']:.2%})"
+            )
         else:
-            display_name = {
-                'SP500': 'S&P 500',
-                'NASDAQ': 'NASDAQ',
-                'DJI': '道瓊指數',
-                'BTC': 'Bitcoin'
-            }.get(name, name)
-            
-            metrics_html += f"""
-            <div class="metric-card">
-                <div class="metric-label">{display_name}</div>
-                <div class="metric-value">載入中...</div>
-                <div class="metric-change loading">⏳ 請稍候</div>
-            </div>
-            """
+            st.metric(
+                label="S&P 500",
+                value="載入中...",
+                delta="請稍候"
+            )
     
-    metrics_html += '</div>'
-    st.markdown(metrics_html, unsafe_allow_html=True)
+    # NASDAQ
+    with col2:
+        data = indices['NASDAQ']
+        if data['value'] is not None:
+            st.metric(
+                label="NASDAQ",
+                value=f"{data['value']:,.2f}",
+                delta=f"{data['change']:.2f} ({data['change_pct']:.2%})"
+            )
+        else:
+            st.metric(
+                label="NASDAQ",
+                value="載入中...",
+                delta="請稍候"
+            )
+    
+    # 道瓊指數
+    with col3:
+        data = indices['DJI']
+        if data['value'] is not None:
+            st.metric(
+                label="道瓊指數",
+                value=f"{data['value']:,.2f}",
+                delta=f"{data['change']:.2f} ({data['change_pct']:.2%})"
+            )
+        else:
+            st.metric(
+                label="道瓊指數",
+                value="載入中...",
+                delta="請稍候"
+            )
+    
+    # Bitcoin
+    with col4:
+        data = indices['BTC']
+        if data['value'] is not None:
+            st.metric(
+                label="Bitcoin",
+                value=f"${data['value']:,.2f}",
+                delta=f"{data['change']:.2f} ({data['change_pct']:.2%})"
+            )
+        else:
+            st.metric(
+                label="Bitcoin",
+                value="載入中...",
+                delta="請稍候"
+            )
 
 def create_hot_stocks_section(hot_stocks, t):
-    """創建熱門股票區域"""
+    """創建熱門股票區域 - 使用Streamlit原生組件"""
     st.markdown(f"""
     <div class="section-header">
         <h2>🔥 {t['hot_stocks']}</h2>
@@ -725,43 +578,33 @@ def create_hot_stocks_section(hot_stocks, t):
     """, unsafe_allow_html=True)
     
     for stock in hot_stocks:
-        change_class = "positive" if stock['change'] >= 0 else "negative"
-        change_symbol = "+" if stock['change'] >= 0 else ""
-        
-        st.markdown(f"""
-        <div class="stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-symbol">{stock['symbol']}</div>
-                    <div class="stock-name">{stock['name']}</div>
-                </div>
-                <div class="stock-price">${stock['price']:.2f}</div>
-            </div>
-            <div class="stock-metrics">
-                <div class="stock-metric">
-                    <div class="stock-metric-label">{t['volume']}</div>
-                    <div class="stock-metric-value">{stock['volume']}</div>
-                </div>
-                <div class="stock-metric">
-                    <div class="stock-metric-label">變動</div>
-                    <div class="stock-metric-value metric-change {change_class}">
-                        {change_symbol}{stock['change']:.1f}%
-                    </div>
-                </div>
-                <div class="stock-metric">
-                    <div class="stock-metric-label">{t['rating']}</div>
-                    <div class="stock-metric-value">{stock['rating']}</div>
-                </div>
-                <div class="stock-metric">
-                    <div class="stock-metric-label">{t['pivot_score']}</div>
-                    <div class="stock-metric-value">{stock['pivot_score']}</div>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        with st.container():
+            st.markdown('<div class="stock-info-card">', unsafe_allow_html=True)
+            
+            # 股票標題行
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                st.markdown(f"### {stock['symbol']}")
+                st.markdown(f"**{stock['name']}**")
+            with col2:
+                st.markdown(f"## ${stock['price']:.2f}")
+            
+            # 股票指標行
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.metric(label=t['volume'], value=stock['volume'])
+            with col2:
+                change_symbol = "+" if stock['change'] >= 0 else ""
+                st.metric(label="變動", value=f"{change_symbol}{stock['change']:.1f}%")
+            with col3:
+                st.metric(label=t['rating'], value=stock['rating'])
+            with col4:
+                st.metric(label=t['pivot_score'], value=stock['pivot_score'])
+            
+            st.markdown('</div>', unsafe_allow_html=True)
 
 def create_pivot_insights_section(insights, t):
-    """創建關鍵點洞察區域"""
+    """創建關鍵點洞察區域 - 使用Streamlit原生組件"""
     st.markdown(f"""
     <div class="section-header">
         <h2>🎯 {t['pivot_point_analytics']}</h2>
@@ -770,41 +613,33 @@ def create_pivot_insights_section(insights, t):
     """, unsafe_allow_html=True)
     
     for insight in insights:
-        st.markdown(f"""
-        <div class="insight-card">
-            <div class="insight-title">{insight['title']}</div>
-            <div class="insight-content">{insight['content']}</div>
-            <div class="insight-metrics">
-                <div class="insight-metric">
-                    <div class="stock-metric-label">信心度</div>
-                    <div class="stock-metric-value">{insight['confidence']}%</div>
-                </div>
-                <div class="insight-metric">
-                    <div class="stock-metric-label">風險等級</div>
-                    <div class="stock-metric-value">{insight['risk_level']}</div>
-                </div>
-                <div class="insight-metric">
-                    <div class="stock-metric-label">時間範圍</div>
-                    <div class="stock-metric-value">{insight['time_horizon']}</div>
-                </div>
-                <div class="insight-metric">
-                    <div class="stock-metric-label">{t['pivot_score']}</div>
-                    <div class="stock-metric-value">{insight['pivot_score']}</div>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        with st.container():
+            st.markdown('<div class="insight-info-card">', unsafe_allow_html=True)
+            
+            st.markdown(f"### {insight['title']}")
+            st.markdown(insight['content'])
+            
+            # 分析指標
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.metric(label="信心度", value=f"{insight['confidence']}%")
+            with col2:
+                st.metric(label="風險等級", value=insight['risk_level'])
+            with col3:
+                st.metric(label="時間範圍", value=insight['time_horizon'])
+            with col4:
+                st.metric(label=t['pivot_score'], value=insight['pivot_score'])
+            
+            st.markdown('</div>', unsafe_allow_html=True)
 
 def create_roadmap_section(t):
-    """創建發展路線圖區域 - 使用Streamlit原生組件避免HTML顯示問題"""
+    """創建發展路線圖區域 - 使用Streamlit原生組件"""
     st.markdown(f"""
     <div class="section-header">
         <h2>🗺️ {t['roadmap']}</h2>
         <p>TENKI 平台未來發展計劃</p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # 使用Streamlit原生組件來避免HTML顯示問題
     
     # 第一階段：功能擴展
     st.markdown("### 🔧 1. 功能擴展")
@@ -882,7 +717,7 @@ def main():
     # Hero 區域
     create_hero_section(t)
     
-    # 即時市場數據
+    # 即時市場數據 - 使用修復版本
     with st.spinner("載入市場數據中..."):
         market_data = get_market_data()
     
@@ -895,7 +730,7 @@ def main():
     insights = generate_pivot_insights(t)
     create_pivot_insights_section(insights, t)
     
-    # 發展路線圖 - 使用修復後的版本
+    # 發展路線圖
     create_roadmap_section(t)
     
     # 底部資訊
