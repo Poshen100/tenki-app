@@ -127,12 +127,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 主標題區域
-st.markdown("""
-<div class="main-header">
-    <div class="logo-title">TENKI</div>
-    <div class="tagline">Turning Insight into Opportunity</div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0639.jpeg" style="width: 85vw; max-width: 420px; margin-top: 18px; margin-bottom: 18px;">
+    </div>
+    """, unsafe_allow_html=True
+)
 
 # Hero區域
 st.markdown("""
