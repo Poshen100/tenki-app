@@ -5,13 +5,16 @@ import plotly.graph_objects as go
 from datetime import datetime
 import numpy as np
 st.markdown(
-    f"""
-    <div style="width: 100vw; margin-left: -8vw; margin-top: -40px; margin-bottom: 12px;">
-        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" 
-             style="width:100vw; max-width:100%; display:block; margin-left: auto; margin-right: auto;">
+    """
+    <div style='width:100vw;min-width:100vw;margin-left:calc(-50vw + 50%);background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);padding:32px 0 24px 0;'>
+        <div style='text-align:center;'>
+            <span style='display:block; font-size:3rem; font-weight:800; letter-spacing:3px; color:white;'>TENKI</span>
+            <span style='display:block; font-size:1.25rem; color:white;opacity:0.92;margin-top:0.5rem;'>Turning Insight into Opportunity</span>
+        </div>
     </div>
     """, unsafe_allow_html=True
 )
+
 
 
 # 頁面配置
