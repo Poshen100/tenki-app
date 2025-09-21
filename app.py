@@ -229,7 +229,12 @@ def load_premium_design_system():
             -webkit-text-fill-color: transparent;
         }
         
-        .hero-section {
+        .hero-section {def create_hero_section(t):
+    st.markdown('<div class="hero-section"><div class="hero-content">', unsafe_allow_html=True)
+    st.image("image.jpeg", width=120)
+    st.markdown(f"<h1 class='hero-title'>{t['app_name']}</h1><p class='hero-subtitle'>{t['tagline']}</p>", unsafe_allow_html=True)
+    st.markdown('</div></div>', unsafe_allow_html=True)
+
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #334155 100%);
             padding: 5rem 3rem;
             border-radius: 32px;
