@@ -14,40 +14,15 @@ st.markdown(
     </div>
     """, unsafe_allow_html=True
 )
-# 標普500期指 (ES) TradingView 圖表
-st.markdown("### 📊 標普500期指 (ES) 即時走勢")
+# 富途牛牛 標普期指
+st.markdown("### 📊 標普期指 (富途牛牛)")
 
-# TradingView Widget
-st.components.v1.html(
-    """
-    <!-- TradingView Widget BEGIN -->
-    <div class="tradingview-widget-container">
-      <div id="tradingview_widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-      <script type="text/javascript">
-      new TradingView.widget(
-      {
-        "width": "100%",
-        "height": 400,
-        "symbol": "CME:ES1!",
-        "interval": "15",
-        "timezone": "Etc/UTC",
-        "theme": "light",
-        "style": "1",
-        "locale": "zh_TW",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "hide_top_toolbar": true,
-        "save_image": false,
-        "container_id": "tradingview_widget"
-      }
-      );
-      </script>
-    </div>
-    <!-- TradingView Widget END -->
-    """,
-    height=420
+st.components.v1.iframe(
+    "https://www.futunn.com/hk/stock/ESmain-US?from=share&stockId=70000963", 
+    height=500,
+    scrolling=True
 )
+
 
 
 
