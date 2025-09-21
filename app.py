@@ -294,3 +294,4 @@ st.markdown("""
     <p>投資有風險，入市需謹慎</p>
 </div>
 """, unsafe_allow_html=True)
+st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/tenki_logo_blue.png", width=320)
