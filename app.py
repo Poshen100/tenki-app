@@ -308,11 +308,12 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown(
-    f"""
-    <div style="width: 100vw; margin-left: -8vw; margin-top: -40px; margin-bottom: 12px;">
-        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" 
-             style="width:100vw; max-width:100%; display:block; margin-left: auto; margin-right: auto;">
+    """
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" style="width:85vw; max-width:420px;">
     </div>
-    """, unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True
 )
+
 
