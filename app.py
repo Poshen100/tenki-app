@@ -14,14 +14,62 @@ st.markdown(
     </div>
     """, unsafe_allow_html=True
 )
-# 富途牛牛 標普期指
-st.markdown("### 📊 標普期指 (富途牛牛)")
+# 美股報價區
+st.markdown("### 📈 美股熱門標的")
 
-st.components.v1.iframe(
-    "https://www.futunn.com/hk/stock/ESmain-US?from=share&stockId=70000963", 
-    height=500,
-    scrolling=True
+# 使用 TradingView 的市場概覽 Widget
+st.components.v1.html(
+    """
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+      {
+        "colorTheme": "light",
+        "dateRange": "1D",
+        "showChart": true,
+        "locale": "zh_TW",
+        "width": "100%",
+        "height": "400",
+        "largeChartUrl": "",
+        "isTransparent": false,
+        "showSymbolLogo": true,
+        "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+        "plotLineColorFalling": "rgba(41, 98, 255, 1)",
+        "gridLineColor": "rgba(42, 46, 57, 0.06)",
+        "scaleFontColor": "rgba(106, 109, 120, 1)",
+        "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+        "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
+        "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+        "tabs": [
+          {
+            "title": "指數",
+            "symbols": [
+              {"s": "FOREXCOM:SPXUSD", "d": "S&P 500"},
+              {"s": "FOREXCOM:NSXUSD", "d": "US 100"},
+              {"s": "FOREXCOM:DJI", "d": "Dow 30"},
+              {"s": "INDEX:NKY", "d": "Nikkei 225"}
+            ]
+          },
+          {
+            "title": "熱門股票",
+            "symbols": [
+              {"s": "NASDAQ:AAPL"},
+              {"s": "NASDAQ:MSFT"},
+              {"s": "NASDAQ:AMZN"},
+              {"s": "NASDAQ:GOOGL"},
+              {"s": "NASDAQ:TSLA"}
+            ]
+          }
+        ]
+      }
+      </script>
+    </div>
+    <!-- TradingView Widget END -->
+    """,
+    height=420
 )
+
 
 
 
