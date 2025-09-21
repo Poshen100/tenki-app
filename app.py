@@ -214,22 +214,24 @@ dates = pd.date_range(start='2024-01-01', end='2024-09-21', freq='D')
 np.random.seed(42)
 price_data = []
 
+# 用 df 當基礎 DataFrame，不要用原始 stock_data dict
 for symbol in ['COIN', 'MSTR', 'RIOT']:
-    base_price = stock_data[stock_data['Symbol'] == symbol]['Price'].iloc[0]
+    base_price = df[df['Symbol'] == symbol]['Price'].iloc[0]
     prices = []
     current_price = base_price * 0.8  # 從較低價格開始
-    
+
     for _ in dates:
-        change = np.random.normal(0, 0.02)  # 2%的日變動標準差
+        change = np.random.normal(0, 0.02)
         current_price *= (1 + change)
         prices.append(current_price)
-    
+
     for i, date in enumerate(dates):
         price_data.append({
             'Date': date,
             'Symbol': symbol,
             'Price': prices[i]
         })
+
 
 price_df = pd.DataFrame(price_data)
 
