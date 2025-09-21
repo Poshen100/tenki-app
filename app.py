@@ -131,3 +131,4 @@ goal = st.sidebar.selectbox(
     TEXT["goal"][LANG], ["成長/Growth/成長", "穩健/Stable/安定", "收益/Income/収益"])
 
 # 這個偏好沒有實際控制甜蜜點，但你可根據需要連動
+st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
