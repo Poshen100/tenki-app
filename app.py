@@ -4,8 +4,6 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import time
-import requests
-from PIL import Image
 
 # ====== 頁面配置 ======
 st.set_page_config(
@@ -132,27 +130,26 @@ if 'language' not in st.session_state:
     st.session_state.language = 'zh'
 
 # ====== 市場數據API ======
-@st.cache_data(ttl=120, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def fetch_live_price_yfinance(symbol):
     """使用 yfinance 獲取即時股價數據"""
     try:
         ticker = yf.Ticker(symbol)
-        info = ticker.info
-        history = ticker.history(period="1d", interval="1m")
+        history = ticker.history(period="2d")
         
         if not history.empty:
             current_price = history['Close'].iloc[-1]
-            previous_close = info.get('previousClose', current_price)
+            previous_close = history['Close'].iloc[-2] if len(history) > 1 else current_price
             change = current_price - previous_close
             change_pct = (change / previous_close) if previous_close != 0 else 0
             
             return float(current_price), float(change), float(change_pct)
     except Exception as e:
-        st.error(f"無法獲取 {symbol} 的數據: {str(e)}")
+        print(f"Error fetching {symbol}: {str(e)}")
     
     return None, None, None
 
-@st.cache_data(ttl=120, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def get_market_data():
     """獲取完整市場數據"""
     
@@ -187,24 +184,63 @@ def get_market_data():
 
 def generate_pivot_insights(t):
     """生成關鍵點分析洞察"""
-    return [
-        {
-            'title': '區塊鏈概念股關鍵突破點' if t == TEXTS['zh'] else 'Blockchain Stock Breakthrough',
-            'content': '比特幣ETF持續淨流入創新高，COIN突破關鍵阻力位$155，技術面顯示強勢上攻態勢，預期目標價$180-200區間。' if t == TEXTS['zh'] else 'Bitcoin ETF net inflows hit new highs, COIN breaks key resistance at $155, technical analysis shows strong bullish momentum, target price $180-200.',
-            'confidence': 87,
-            'risk_level': '中等' if t == TEXTS['zh'] else 'Medium',
-            'time_horizon': '2-4週' if t == TEXTS['zh'] else '2-4 weeks',
-            'pivot_score': 85
-        },
-        {
-            'title': 'AI晶片供應鏈的關鍵轉折' if t == TEXTS['zh'] else 'AI Chip Supply Chain Pivot',
-            'content': 'NVIDIA財報超預期後，整個AI生態鏈進入新一輪上升週期，關注TSM、AMD等在$150關鍵支撐位的表現。' if t == TEXTS['zh'] else 'After NVIDIA\'s earnings beat, AI ecosystem enters new growth cycle. Watch TSM, AMD performance at $150 key support level.',
-            'confidence': 82,
-            'risk_level': '中高' if t == TEXTS['zh'] else 'Medium-High',
-            'time_horizon': '4-8週' if t == TEXTS['zh'] else '4-8 weeks',
-            'pivot_score': 78
-        }
-    ]
+    if t == TEXTS['zh']:
+        return [
+            {
+                'title': '區塊鏈概念股關鍵突破點',
+                'content': '比特幣ETF持續淨流入創新高，COIN突破關鍵阻力位$155，技術面顯示強勢上攻態勢，預期目標價$180-200區間。',
+                'confidence': 87,
+                'risk_level': '中等',
+                'time_horizon': '2-4週',
+                'pivot_score': 85
+            },
+            {
+                'title': 'AI晶片供應鏈的關鍵轉折',
+                'content': 'NVIDIA財報超預期後，整個AI生態鏈進入新一輪上升週期，關注TSM、AMD等在$150關鍵支撐位的表現。',
+                'confidence': 82,
+                'risk_level': '中高',
+                'time_horizon': '4-8週',
+                'pivot_score': 78
+            }
+        ]
+    elif t == TEXTS['en']:
+        return [
+            {
+                'title': 'Blockchain Stock Breakthrough Point',
+                'content': 'Bitcoin ETF net inflows hit new highs, COIN breaks key resistance at $155, technical analysis shows strong bullish momentum, target price $180-200.',
+                'confidence': 87,
+                'risk_level': 'Medium',
+                'time_horizon': '2-4 weeks',
+                'pivot_score': 85
+            },
+            {
+                'title': 'AI Chip Supply Chain Pivot',
+                'content': 'After NVIDIA earnings beat, AI ecosystem enters new growth cycle. Watch TSM, AMD performance at $150 key support level.',
+                'confidence': 82,
+                'risk_level': 'Medium-High',
+                'time_horizon': '4-8 weeks',
+                'pivot_score': 78
+            }
+        ]
+    else:  # Japanese
+        return [
+            {
+                'title': 'ブロックチェーン株のブレイクポイント',
+                'content': 'ビットコインETFの純流入が新高値を記録、COINが重要な抵抗線155ドルを突破、テクニカル分析では強気の勢いを示し、目標価格は180-200ドル。',
+                'confidence': 87,
+                'risk_level': '中程度',
+                'time_horizon': '2-4週間',
+                'pivot_score': 85
+            },
+            {
+                'title': 'AIチップサプライチェーンの転換点',
+                'content': 'NVIDIA決算超過後、AI生態系は新たな成長サイクルに入る。TSM、AMDの150ドル重要サポートレベルでのパフォーマンスに注目。',
+                'confidence': 82,
+                'risk_level': '中高',
+                'time_horizon': '4-8週間',
+                'pivot_score': 78
+            }
+        ]
 
 # ====== UI設計系統 ======
 def load_premium_design_system():
@@ -219,121 +255,99 @@ def load_premium_design_system():
             -webkit-font-smoothing: antialiased;
         }
         
-        #MainMenu, footer, header, .stDeployButton {visibility: hidden !important;}
-        
         .main .block-container {
-            padding: 0rem 2rem 3rem 2rem;
-            max-width: 1600px;
+            padding: 1rem 2rem 3rem 2rem;
+            max-width: 1400px;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        .stApp > header {
+            background-color: transparent;
+        }
+        
+        .stApp {
+            margin-top: -80px;
+        }
+        
+        #MainMenu, footer, header {
+            visibility: hidden !important;
         }
         
         .top-banner {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem 0;
+            padding: 2rem 1rem;
             background: white;
-            border-radius: 24px;
+            border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .top-banner img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 16px;
-        }
-        
-        .top-navigation {
-            position: sticky;
-            top: 0;
-            height: 75px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: saturate(200%) blur(25px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-            margin-bottom: 2rem;
-            border-radius: 0 0 24px 24px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        }
-        
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .nav-logo-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-            object-fit: cover;
-        }
-        
-        .nav-brand {
-            font-size: 26px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
         
         .hero-section {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #334155 100%);
-            padding: 5rem 3rem;
-            border-radius: 32px;
-            margin-bottom: 4rem;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 64px rgba(0, 0, 0, 0.25);
-        }
-        
-        .hero-content {
+            padding: 4rem 2rem;
+            border-radius: 24px;
+            margin-bottom: 3rem;
             text-align: center;
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
+            color: white;
+            box-shadow: 0 20px 64px rgba(0, 0, 0, 0.2);
         }
         
         .hero-title {
-            font-size: clamp(3.5rem, 9vw, 5.5rem);
+            font-size: 3.5rem;
             font-weight: 900;
             letter-spacing: -0.05em;
+            margin-bottom: 1rem;
             background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
-            line-height: 1;
         }
         
         .hero-subtitle {
-            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-size: 1.4rem;
             color: #cbd5e1;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
         
-        .metrics-grid {
+        .section-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .metrics-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
         
         .metric-card {
             background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 6px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
             text-align: center;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
         }
         
         .metric-card::before {
@@ -347,13 +361,13 @@ def load_premium_design_system():
         }
         
         .metric-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
         
         .metric-label {
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -361,55 +375,32 @@ def load_premium_design_system():
         }
         
         .metric-value {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: #0f172a;
-            margin-bottom: 1rem;
-            letter-spacing: -0.03em;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.02em;
         }
         
         .metric-change {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
         
         .metric-change.positive { color: #059669; }
         .metric-change.negative { color: #dc2626; }
         .metric-change.loading { color: #6b7280; }
         
-        .section-header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            margin: 3rem 0 2rem 0;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-        
-        .section-header p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin: 0;
-        }
-        
         .stock-card {
             background: white;
             border-radius: 16px;
             padding: 2rem;
             margin: 1rem 0;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             border-left: 4px solid #3b82f6;
         }
@@ -423,32 +414,31 @@ def load_premium_design_system():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .stock-symbol {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #1e293b;
         }
         
         .stock-name {
             color: #64748b;
-            font-size: 0.9rem;
-            margin-top: 0.2rem;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
         }
         
         .stock-price {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: #0f172a;
         }
         
         .stock-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 1rem;
-            margin-top: 1.5rem;
         }
         
         .stock-metric {
@@ -459,15 +449,16 @@ def load_premium_design_system():
         }
         
         .stock-metric-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #64748b;
             font-weight: 600;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
         
         .stock-metric-value {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #1e293b;
         }
@@ -479,7 +470,7 @@ def load_premium_design_system():
             padding: 2rem;
             margin: 1rem 0;
             position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
         
         .insight-card::before {
@@ -490,10 +481,11 @@ def load_premium_design_system():
             right: 0;
             height: 3px;
             background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            border-radius: 16px 16px 0 0;
         }
         
         .insight-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #0c4a6e;
             margin-bottom: 1rem;
@@ -507,28 +499,27 @@ def load_premium_design_system():
         
         .insight-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 0.8rem;
         }
         
         .insight-metric {
             text-align: center;
             padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
         }
         
         .roadmap-container {
             background: white;
             border-radius: 20px;
-            padding: 3rem;
+            padding: 2.5rem;
             margin: 2rem 0;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
         
         .roadmap-phase {
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             position: relative;
             padding-left: 2rem;
         }
@@ -545,7 +536,7 @@ def load_premium_design_system():
         }
         
         .roadmap-phase h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 1rem;
@@ -554,23 +545,24 @@ def load_premium_design_system():
         .roadmap-item {
             display: flex;
             align-items: center;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
+            padding: 0.8rem 1rem;
+            margin: 0.4rem 0;
             background: #f8fafc;
-            border-radius: 12px;
+            border-radius: 10px;
             transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
         
         .roadmap-item:hover {
             background: #e2e8f0;
-            transform: translateX(8px);
+            transform: translateX(6px);
         }
         
         .roadmap-item::before {
             content: '●';
             color: #64748b;
-            margin-right: 1rem;
-            font-size: 0.8rem;
+            margin-right: 0.8rem;
+            font-size: 0.7rem;
         }
         
         .language-selector {
@@ -578,38 +570,14 @@ def load_premium_design_system():
             gap: 1rem;
             justify-content: center;
             margin: 2rem 0;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        .lang-button {
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        
-        .lang-button:hover {
-            border-color: #3b82f6;
-            background: #f0f9ff;
-        }
-        
-        .lang-button.active {
-            border-color: #3b82f6;
-            background: #3b82f6;
-            color: white;
+            flex-wrap: wrap;
         }
         
         @media (max-width: 768px) {
             .main .block-container {
-                padding: 0rem 1rem 2rem 1rem;
+                padding: 1rem 1rem 2rem 1rem;
             }
-            .metrics-grid {
+            .metrics-container {
                 grid-template-columns: 1fr;
             }
             .stock-metrics {
@@ -618,73 +586,64 @@ def load_premium_design_system():
             .insight-metrics {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .language-selector {
-                flex-direction: column;
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .section-header h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
     """, unsafe_allow_html=True)
 
 def create_top_banner():
-    """創建頂部橫幅 - 使用IMG_0638.png"""
+    """創建頂部橫幅 - 使用TENKI品牌圖片"""
+    st.markdown('<div class="top-banner">', unsafe_allow_html=True)
+    
+    # 嘗試載入圖片的多種方式
     try:
-        # 嘗試載入本地圖片
-        st.markdown('<div class="top-banner">', unsafe_allow_html=True)
-        
-        # 方法1: 如果圖片在本地目錄
+        # 方法1: 本地圖片檔案
+        st.image("IMG_0638.png", use_container_width=True)
+    except:
         try:
-            st.image("IMG_0638.png", use_column_width=True)
+            # 方法2: 使用附件中的圖片
+            st.image("image.jpeg", use_container_width=True)
         except:
-            # 方法2: 如果是附件中的image.jpeg
-            try:
-                st.image("image.jpeg", use_column_width=True)
-            except:
-                # 方法3: 使用GitHub URL (需要先上傳)
-                st.markdown("""
-                <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" 
-                     alt="TENKI Banner" style="width: 100%; max-width: 800px; height: auto; border-radius: 16px;">
-                """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-    except Exception as e:
-        st.warning(f"無法載入橫幅圖片: {str(e)}")
+            # 方法3: 使用替代的TENKI Logo HTML
+            st.markdown("""
+            <div style="text-align: center; padding: 2rem;">
+                <div style="display: inline-flex; align-items: center; gap: 1rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: white; font-size: 1.5rem; font-weight: bold;">T</span>
+                    </div>
+                    <div>
+                        <div style="font-size: 2.5rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem;">TENKI</div>
+                        <div style="font-size: 1.2rem; color: #64748b;">Turning Insight into Opportunity</div>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def create_hero_section(t):
     """創建Hero區域"""
     st.markdown(f"""
     <div class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">{t['app_name']}</h1>
-            <p class="hero-subtitle">{t['tagline']}</p>
-        </div>
+        <h1 class="hero-title">{t['app_name']}</h1>
+        <p class="hero-subtitle">{t['tagline']}</p>
     </div>
     """, unsafe_allow_html=True)
-
-def create_metric_card(label, value, change, change_pct):
-    """創建指標卡片"""
-    if value is None or change is None or change_pct is None:
-        return f"""
-        <div class="metric-card">
-            <div class="metric-label">{label}</div>
-            <div class="metric-value">數據載入中...</div>
-            <div class="metric-change loading">⏳ 請稍候</div>
-        </div>
-        """
-    
-    change_class = "positive" if change >= 0 else "negative"
-    change_symbol = "+" if change >= 0 else ""
-    change_icon = "↗" if change >= 0 else "↘"
-    
-    return f"""
-    <div class="metric-card">
-        <div class="metric-label">{label}</div>
-        <div class="metric-value">{value:,.2f}</div>
-        <div class="metric-change {change_class}">
-            <span>{change_icon}</span>
-            {change_symbol}{change:.2f} ({change_symbol}{change_pct:.2%})
-        </div>
-    </div>
-    """
 
 def language_selector(t):
     """語言選擇器"""
@@ -714,6 +673,62 @@ def language_selector(t):
                      type="primary" if st.session_state.language == 'jp' else "secondary"):
             st.session_state.language = 'jp'
             st.rerun()
+
+def create_market_data_section(market_data, t):
+    """創建市場數據區域"""
+    st.markdown(f"""
+    <div class="section-header">
+        <h2>📊 {t['real_time_market']}</h2>
+        <p>全球主要指數即時追蹤</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    indices = market_data['indices']
+    
+    # 創建指標卡片
+    metrics_html = '<div class="metrics-container">'
+    
+    for name, data in indices.items():
+        if data['value'] is not None:
+            change_class = "positive" if data['change'] >= 0 else "negative"
+            change_symbol = "+" if data['change'] >= 0 else ""
+            change_icon = "↗" if data['change'] >= 0 else "↘"
+            
+            display_name = {
+                'SP500': 'S&P 500',
+                'NASDAQ': 'NASDAQ',
+                'DJI': '道瓊指數',
+                'BTC': 'Bitcoin'
+            }.get(name, name)
+            
+            metrics_html += f"""
+            <div class="metric-card">
+                <div class="metric-label">{display_name}</div>
+                <div class="metric-value">{data['value']:,.2f}</div>
+                <div class="metric-change {change_class}">
+                    <span>{change_icon}</span>
+                    {change_symbol}{data['change']:.2f} ({change_symbol}{data['change_pct']:.2%})
+                </div>
+            </div>
+            """
+        else:
+            display_name = {
+                'SP500': 'S&P 500',
+                'NASDAQ': 'NASDAQ',
+                'DJI': '道瓊指數',
+                'BTC': 'Bitcoin'
+            }.get(name, name)
+            
+            metrics_html += f"""
+            <div class="metric-card">
+                <div class="metric-label">{display_name}</div>
+                <div class="metric-value">載入中...</div>
+                <div class="metric-change loading">⏳ 請稍候</div>
+            </div>
+            """
+    
+    metrics_html += '</div>'
+    st.markdown(metrics_html, unsafe_allow_html=True)
 
 def create_hot_stocks_section(hot_stocks, t):
     """創建熱門股票區域"""
@@ -829,12 +844,14 @@ def create_roadmap_section(t):
 
 # ====== 主應用程式 ======
 def main():
+    # 載入設計系統
     load_premium_design_system()
     
+    # 獲取當前語言設定
     lang = st.session_state.language
     t = TEXTS[lang]
     
-    # 頂部橫幅 - 使用 IMG_0638.png
+    # 頂部橫幅
     create_top_banner()
     
     # 語言選擇器
@@ -844,38 +861,10 @@ def main():
     create_hero_section(t)
     
     # 即時市場數據
-    st.markdown(f"""
-    <div class="section-header">
-        <h2>📊 {t['real_time_market']}</h2>
-        <p>全球主要指數即時追蹤</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    with st.spinner("載入即時市場數據..."):
+    with st.spinner("載入市場數據中..."):
         market_data = get_market_data()
     
-    st.markdown('<div class="metrics-grid">', unsafe_allow_html=True)
-    
-    indices = market_data['indices']
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        sp_data = indices['SP500']
-        st.markdown(create_metric_card("S&P 500", sp_data['value'], sp_data['change'], sp_data['change_pct']), unsafe_allow_html=True)
-    
-    with col2:
-        nasdaq_data = indices['NASDAQ']
-        st.markdown(create_metric_card("NASDAQ", nasdaq_data['value'], nasdaq_data['change'], nasdaq_data['change_pct']), unsafe_allow_html=True)
-    
-    with col3:
-        dji_data = indices['DJI']
-        st.markdown(create_metric_card("道瓊指數", dji_data['value'], dji_data['change'], dji_data['change_pct']), unsafe_allow_html=True)
-    
-    with col4:
-        btc_data = indices['BTC']
-        st.markdown(create_metric_card("Bitcoin", btc_data['value'], btc_data['change'], btc_data['change_pct']), unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+    create_market_data_section(market_data, t)
     
     # 熱門股票區域
     create_hot_stocks_section(market_data['hot_stocks'], t)
@@ -893,6 +882,9 @@ def main():
     <div style="text-align: center; padding: 2rem; color: #64748b;">
         <p><strong>TENKI</strong> - {t['tagline']}</p>
         <p>© 2025 TENKI Financial Intelligence Platform</p>
+        <p style="font-size: 0.8rem; margin-top: 1rem;">
+            本平台僅供投資參考，投資有風險，請謹慎評估
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
