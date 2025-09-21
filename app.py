@@ -130,5 +130,18 @@ risk = st.sidebar.selectbox(
 goal = st.sidebar.selectbox(
     TEXT["goal"][LANG], ["成長/Growth/成長", "穩健/Stable/安定", "收益/Income/収益"])
 
-# 這個偏好沒有實際控制甜蜜點，但你可根據需要連動
-st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
+# 這個偏好沒有實際控制甜蜜點，但你可根據需要連動if not st.session_state["user"]:
+    st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
+    st.markdown("<h2 style='text-align: center; margin-top: 0;'>TENKI</h2>", unsafe_allow_html=True)
+    st.write("<p style='text-align: center; color: grey;'>Turning Insight into Opportunity</p>", unsafe_allow_html=True)
+    st.subheader(TEXT["login_title"][LANG])
+    user = st.text_input(TEXT["username"][LANG])
+    pw = st.text_input(TEXT["password"][LANG], type="password")
+    if st.button(TEXT["btn_login"][LANG]):
+        if user == DEMO_USER["email"] and pw == DEMO_USER["password"]:
+            st.success(TEXT["login_success"][LANG])
+            st.session_state["user"] = user
+        else:
+            st.error(TEXT["login_fail"][LANG])
+    st.stop()
+
