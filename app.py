@@ -1,10 +1,89 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import numpy as np
-from datetime import datetime, timedelta
-import time
+import requests
+from datetime import datetime
+
+st.set_page_config(
+    page_title="TENKI - Pivot Point Intelligence",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# 多語言設定略，使用前面你提供的 LANGUAGES 和 TEXTS 字典
+
+if 'language' not in st.session_state:
+    st.session_state.language = 'zh'
+
+# 取得即時指數價格（使用 Yahoo Finance API 範例）
+def fetch_live_index_price(symbol):
+    url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbol}"
+    try:
+        res = requests.get(url)
+        data = res.json()
+        price = data['quoteResponse']['result'][0]['regularMarketPrice']
+        change = data['quoteResponse']['result'][0]['regularMarketChange']
+        change_pct = data['quoteResponse']['result'][0]['regularMarketChangePercent'] / 100
+        return price, change, change_pct
+    except Exception:
+        return None, None, None
+
+def get_live_market_data():
+    sp_price, sp_change, sp_change_pct = fetch_live_index_price("^GSPC")  # S&P 500
+    nasdaq_price, nasdaq_change, nasdaq_change_pct = fetch_live_index_price("^IXIC")  # NASDAQ
+    dji_price, dji_change, dji_change_pct = fetch_live_index_price("^DJI")  # Dow Jones
+    btc_price, btc_change, btc_change_pct = fetch_live_index_price("BTC-USD")  # Bitcoin
+    
+    data = {
+        'indices': {
+            'SP500': {'value': sp_price, 'change': sp_change, 'change_pct': sp_change_pct},
+            'NASDAQ': {'value': nasdaq_price, 'change': nasdaq_change, 'change_pct': nasdaq_change_pct},
+            'DJI': {'value': dji_price, 'change': dji_change, 'change_pct': dji_change_pct},
+            'BTC': {'value': btc_price, 'change': btc_change, 'change_pct': btc_change_pct}
+        },
+        # 其他資料保持不變或同前，可擴展
+    }
+    return data
+
+# 其餘功能與 UI 設計請參考之前提供的優化版，並將指數價格改用這個:
+
+def main():
+    load_premium_design_system()
+    lang = st.session_state.language
+    t = TEXTS[lang]
+
+    create_top_navigation(t)
+    language_selector()
+    st.markdown("---")
+    st.markdown(create_hero_section(t), unsafe_allow_html=True)
+
+    # 更新此處取得即時數據
+    market_data = get_live_market_data()
+
+    # 顯示指數
+    st.markdown(f"### 📊 {t['real_time_market']}")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        sp = market_data['indices']['SP500']
+        st.markdown(create_metric_card("S&P 500", f"{sp['value']:.2f}", sp['change'], sp['change_pct']), unsafe_allow_html=True)
+    with col2:
+        ns = market_data['indices']['NASDAQ']
+        st.markdown(create_metric_card("NASDAQ", f"{ns['value']:.2f}", ns['change'], ns['change_pct']), unsafe_allow_html=True)
+    with col3:
+        dj = market_data['indices']['DJI']
+        st.markdown(create_metric_card("Dow Jones", f"{dj['value']:.2f}", dj['change'], dj['change_pct']), unsafe_allow_html=True)
+    with col4:
+        btc = market_data['indices']['BTC']
+        st.markdown(create_metric_card("Bitcoin", f"${btc['value']:.0f}", btc['change'], btc['change_pct']), unsafe_allow_html=True)
+
+    # 其餘程式碼照舊 (包括TradingView整合、AI洞察、股票追蹤等)
+
+if __name__ == "__main__":
+    main()
+    # 頁腳保持不變
+
 
 # ====== 頁面配置 ======
 st.set_page_config(
