@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 # --- 多語言詞典 ---
 TEXT = {
@@ -55,9 +56,11 @@ if "user" not in st.session_state:
 if "portfolio" not in st.session_state:
     st.session_state["portfolio"] = {}
 
-# --- 登入頁 ---
+# --- 登入頁（加上Logo） ---
 if not st.session_state["user"]:
-    st.title("TENKI")
+    st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
+    st.markdown("<h2 style='text-align: center; margin-top: 0;'>TENKI</h2>", unsafe_allow_html=True)
+    st.write("<p style='text-align: center; color: grey;'>Turning Insight into Opportunity</p>", unsafe_allow_html=True)
     st.subheader(TEXT["login_title"][LANG])
     user = st.text_input(TEXT["username"][LANG])
     pw = st.text_input(TEXT["password"][LANG], type="password")
@@ -88,14 +91,13 @@ sweet_spots = [
      "expected_return":"4-6%"}
 ]
 
-import random
 idx = random.randint(0, len(sweet_spots)-1)
 spot = sweet_spots[idx]
 st.subheader(TEXT["sweet_spot"][LANG])
-st.write(f"**{TEXT['theme'][LANG]}:** {spot['theme'][LANG]}")
-st.write(f"**{TEXT['insight'][LANG]}:** {spot['insight'][LANG]}")
-st.write(f"**{TEXT['targets'][LANG]}:** {', '.join(spot['targets'])}")
-st.write(f"**{TEXT['expected_return'][LANG]}:** {spot['expected_return']}")
+st.write(f\"**{TEXT['theme'][LANG]}:** {spot['theme'][LANG]}\")
+st.write(f\"**{TEXT['insight'][LANG]}:** {spot['insight'][LANG]}\")
+st.write(f\"**{TEXT['targets'][LANG]}:** {', '.join(spot['targets'])}\")
+st.write(f\"**{TEXT['expected_return'][LANG]}:** {spot['expected_return']}\")
 
 # --- 虛擬組合 ---
 st.subheader(TEXT["virtual_portfolio"][LANG])
@@ -120,17 +122,15 @@ with st.form("add_stock"):
             st.session_state["portfolio"] = portfolio
             st.success(TEXT["success_add"][LANG])
         else:
-            st.warning(TEXT["stock"][LANG] + " " + TEXT["confirm"][if not st.session_state["user"]:
-    st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
-    st.markdown("<h2 style='text-align: center; margin-top: 0;'>TENKI</h2>", unsafe_allow_html=True)
-    st.write("<p style='text-align: center; color: grey;'>Turning Insight into Opportunity</p>", unsafe_allow_html=True)
-    st.subheader(TEXT["login_title"][LANG])
-    user = st.text_input(TEXT["username"][LANG])
-    pw = st.text_input(TEXT["password"][LANG], type="password")
-    if st.button(TEXT["btn_login"][LANG]):
-        if user == DEMO_USER["email"] and pw == DEMO_USER["password"]:
-            st.success(TEXT["login_success"][LANG])
-            st.session_state["user"] = user
-        else:
-            st.error(TEXT["login_fail"][LANG])
-    st.stop()
+            st.warning(TEXT["stock"][LANG] + " " + TEXT["confirm"][LANG])
+
+# --- 個人化偏好 ---
+st.sidebar.markdown("### " + TEXT["profile"][LANG])
+st.sidebar.markdown(TEXT["investment_pref"][LANG])
+risk = st.sidebar.selectbox(
+    TEXT["risk"][LANG], ["低/Low/低", "中/Medium/中", "高/High/高"])
+goal = st.sidebar.selectbox(
+    TEXT["goal"][LANG], ["成長/Growth/成長", "穩健/Stable/安定", "收益/Income/収益"])
+
+# 這個偏好沒有實際控制甜蜜點，但你可根據需要連動
+
