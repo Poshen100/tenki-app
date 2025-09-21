@@ -6,6 +6,16 @@ from datetime import datetime
 import time
 
 # ====== 頁面配置 ======
+def create_top_navigation(t):
+    st.markdown(f"""
+    <div class="top-navigation">
+        <div class="nav-logo">
+            <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" alt="TENKI Logo" class="nav-logo-img">
+            <div class="nav-brand">{t['app_name']}</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 st.set_page_config(
     page_title="TENKI - Pivot Point Intelligence",
     page_icon="⚡",
