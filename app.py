@@ -1,147 +1,140 @@
 import streamlit as st
 import yfinance as yf
+import requests
 import pandas as pd
-import numpy as np
 from datetime import datetime
 
 # ====== 頁面配置 ======
 st.set_page_config(
     page_title="TENKI",
     page_icon="⚡",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# ====== 初始化 ======
-if 'current_page' not in st.session_state:
-    st.session_state.current_page = 'dashboard'
-
-# ====== 獲取股票數據 ======
+# ====== 獲取Yahoo財經數據 ======
 @st.cache_data(ttl=300, show_spinner=False)
-def get_stock_data(symbol):
+def get_yahoo_price(symbol):
     try:
         ticker = yf.Ticker(symbol)
-        history = ticker.history(period="1d", interval="5m")
-        if not history.empty:
-            current_price = history['Close'].iloc[-1]
-            previous_close = ticker.info.get('previousClose', current_price)
-            change = current_price - previous_close
-            change_pct = (change / previous_close) if previous_close != 0 else 0
+        data = ticker.history(period="1d", interval="1m")
+        if not data.empty:
+            current = data['Close'].iloc[-1]
+            previous = ticker.info.get('previousClose', current)
+            change = current - previous
+            change_pct = (change / previous) * 100 if previous != 0 else 0
             return {
                 'symbol': symbol,
-                'price': float(current_price),
+                'price': float(current),
                 'change_pct': float(change_pct)
             }
     except:
         pass
-    return {'symbol': symbol, 'price': 100.0, 'change_pct': 0.01}
+    return {'symbol': symbol, 'price': 150.0, 'change_pct': 1.5}
 
-# ====== iPhone風格CSS ======
-def load_iphone_style():
+# ====== 極簡iPhone風格CSS ======
+def load_clean_style():
     st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800;900&display=swap');
-        
         /* 隱藏Streamlit元素 */
-        #MainMenu, footer, header, .stDeployButton {visibility: hidden !important;}
-        .main > div {padding-top: 0rem;}
+        #MainMenu, footer, header, .stDeployButton, .stDecoration {display: none !important;}
+        .main > div {padding-top: 0rem !important;}
         
-        /* iPhone容器 */
-        .main .block-container {
-            padding: 0;
-            max-width: 100%;
-            background: #f5f5f7;
+        /* 基礎設定 */
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
         
-        .iphone-container {
-            max-width: 390px;
+        .main .block-container {
+            padding: 0rem;
+            max-width: 100% !important;
+            background: #000000;
+        }
+        
+        /* iPhone容器 */
+        .iphone-frame {
+            max-width: 375px;
             margin: 20px auto;
             background: white;
-            border-radius: 40px;
-            box-shadow: 0 0 60px rgba(0,0,0,0.3);
+            border-radius: 30px;
             overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
             position: relative;
-            min-height: 844px;
+            min-height: 812px;
         }
         
         /* 狀態欄 */
         .status-bar {
-            height: 50px;
+            height: 44px;
             background: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'SF Pro Display', sans-serif;
             font-size: 17px;
             font-weight: 600;
-            color: #1d1d1f;
-            border-bottom: 0.5px solid #e5e5e7;
+            color: #000;
         }
         
-        /* 主內容區 */
-        .main-content {
-            padding: 20px;
-            min-height: 650px;
-            background: #f5f5f7;
+        /* 主內容 */
+        .content {
+            background: #000000;
+            min-height: 720px;
+            padding: 0;
         }
         
-        /* Logo區域 */
-        .logo-section {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+        /* Logo卡片 */
+        .logo-card {
             background: white;
+            margin: 20px;
             border-radius: 20px;
+            padding: 30px;
+            text-align: center;
         }
         
-        .app-logo {
+        .logo {
             width: 80px;
             height: 80px;
-            border-radius: 18px;
             margin: 0 auto 16px;
             display: block;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border-radius: 16px;
         }
         
-        .app-title {
-            font-family: 'SF Pro Display', sans-serif;
-            font-size: 32px;
+        .logo-title {
+            font-size: 28px;
             font-weight: 800;
-            color: #1d1d1f;
+            color: #007AFF;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
         
-        .app-subtitle {
-            font-family: 'SF Pro Display', sans-serif;
-            font-size: 16px;
-            color: #86868b;
-            font-weight: 400;
+        .logo-subtitle {
+            font-size: 14px;
+            color: #8E8E93;
+            margin: 0;
         }
         
-        /* 今日亮點卡片 */
-        .highlight-card {
+        /* 今日甜機卡片 */
+        .sweet-spot-card {
             background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            margin: 20px;
             border-radius: 20px;
             padding: 24px;
             color: white;
-            margin-bottom: 30px;
             position: relative;
             overflow: hidden;
         }
         
-        .highlight-card::before {
+        .sweet-spot-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
         }
         
-        .highlight-title {
-            font-family: 'SF Pro Display', sans-serif;
+        .sweet-title {
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 6px;
@@ -149,15 +142,15 @@ def load_iphone_style():
             z-index: 1;
         }
         
-        .highlight-subtitle {
+        .sweet-subtitle {
             font-size: 16px;
-            opacity: 0.8;
+            opacity: 0.9;
             margin-bottom: 12px;
             position: relative;
             z-index: 1;
         }
         
-        .highlight-description {
+        .sweet-desc {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
@@ -165,7 +158,7 @@ def load_iphone_style():
             z-index: 1;
         }
         
-        .highlight-detail {
+        .sweet-detail {
             font-size: 14px;
             opacity: 0.8;
             margin-bottom: 20px;
@@ -173,92 +166,89 @@ def load_iphone_style():
             z-index: 1;
         }
         
-        .highlight-button {
+        .sweet-btn {
             background: rgba(255,255,255,0.2);
             border: none;
             border-radius: 12px;
-            padding: 12px 24px;
+            padding: 12px 20px;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            backdrop-filter: blur(10px);
             position: relative;
             z-index: 1;
+            backdrop-filter: blur(10px);
+            width: 100%;
         }
         
-        /* 股票網格 */
-        .section-title {
-            font-family: 'SF Pro Display', sans-serif;
+        /* 追蹤標題 */
+        .watchlist-title {
+            color: white;
             font-size: 22px;
             font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-            letter-spacing: -0.3px;
+            margin: 30px 20px 20px 20px;
         }
         
-        .stock-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
+        /* 股票列表 */
+        .stock-list {
+            padding: 0 20px 100px 20px;
         }
         
         .stock-item {
             background: white;
             border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            border: 0.5px solid #e5e5e7;
+            padding: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: relative;
         }
         
-        .stock-item.positive::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #30d158;
-            border-radius: 2px 0 0 2px;
+        .stock-left {
+            display: flex;
+            align-items: center;
         }
         
-        .stock-item.negative::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
+        .stock-indicator {
             width: 4px;
-            background: #ff3b30;
-            border-radius: 2px 0 0 2px;
+            height: 40px;
+            border-radius: 2px;
+            margin-right: 16px;
         }
         
-        .stock-symbol {
-            font-family: 'SF Pro Display', sans-serif;
-            font-size: 16px;
+        .stock-indicator.green {
+            background: #34C759;
+        }
+        
+        .stock-indicator.red {
+            background: #FF3B30;
+        }
+        
+        .stock-info h3 {
+            font-size: 18px;
             font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 4px;
-        }
-        
-        .stock-change {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-        
-        .stock-change.positive {
-            color: #30d158;
-        }
-        
-        .stock-change.negative {
-            color: #ff3b30;
+            color: #000;
+            margin: 0 0 4px 0;
         }
         
         .stock-price {
-            font-size: 12px;
-            color: #86868b;
+            font-size: 14px;
+            color: #8E8E93;
+            margin: 0;
+        }
+        
+        .stock-change {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .stock-change.green {
+            color: #34C759;
+        }
+        
+        .stock-change.red {
+            color: #FF3B30;
         }
         
         /* 底部導航 */
@@ -267,50 +257,40 @@ def load_iphone_style():
             bottom: 0;
             left: 0;
             right: 0;
-            height: 90px;
+            height: 80px;
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
-            border-top: 0.5px solid rgba(0,0,0,0.05);
+            border-top: 0.5px solid rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding-bottom: 20px;
         }
         
-        .nav-item {
+        .nav-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'SF Pro Display', sans-serif;
-            cursor: pointer;
+            text-decoration: none;
+            color: #8E8E93;
+            font-size: 10px;
+        }
+        
+        .nav-btn.active {
+            color: #007AFF;
         }
         
         .nav-icon {
             font-size: 24px;
-            margin-bottom: 4px;
-        }
-        
-        .nav-label {
-            font-size: 11px;
-            font-weight: 500;
-            color: #86868b;
-        }
-        
-        .nav-item.active .nav-label {
-            color: #007AFF;
-        }
-        
-        .nav-item.active .nav-icon {
-            color: #007AFF;
+            margin-bottom: 2px;
         }
         
         /* 響應式 */
-        @media (max-width: 480px) {
-            .iphone-container {
+        @media (max-width: 400px) {
+            .iphone-frame {
                 margin: 0;
                 border-radius: 0;
                 max-width: 100%;
-                box-shadow: none;
             }
         }
         
@@ -318,96 +298,109 @@ def load_iphone_style():
     """, unsafe_allow_html=True)
 
 # ====== UI組件 ======
-def create_iphone_layout():
+def create_logo_section():
     st.markdown("""
-    <div class="iphone-container">
-        <div class="status-bar">TENKI</div>
-        <div class="main-content">
-    """, unsafe_allow_html=True)
-    
-    # Logo區域
-    st.markdown("""
-    <div class="logo-section">
-        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" alt="TENKI Logo" class="app-logo">
-        <h1 class="app-title">TENKI</h1>
-        <p class="app-subtitle">Turning Insight into Opportunity</p>
+    <div class="logo-card">
+        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" alt="TENKI" class="logo">
+        <h1 class="logo-title">TENKI</h1>
+        <p class="logo-subtitle">Turning Insight into Opportunity</p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # 今日亮點
+
+def create_sweet_spot_card():
     st.markdown("""
-    <div class="highlight-card">
-        <h2 class="highlight-title">今日甜機</h2>
-        <p class="highlight-subtitle">(Today's Sweet Spot)</p>
-        <p class="highlight-description">美股區塊鏈概念股</p>
-        <p class="highlight-detail">比特幣ETF熱錢前，預期Q4漲幅15-20%</p>
-        <button class="highlight-button">查看高性價比方案</button>
+    <div class="sweet-spot-card">
+        <h2 class="sweet-title">今日甜機</h2>
+        <p class="sweet-subtitle">(Today's Sweet Spot)</p>
+        <p class="sweet-desc">美股區塊鏈概念股</p>
+        <p class="sweet-detail">比特幣ETF熱錢前，預期Q4漲幅15-20%</p>
+        <button class="sweet-btn">查看高性價比方案</button>
     </div>
     """, unsafe_allow_html=True)
+
+def create_stock_list():
+    st.markdown('<div class="watchlist-title">我的追蹤</div>', unsafe_allow_html=True)
+    st.markdown('<div class="stock-list">', unsafe_allow_html=True)
     
-    # 股票追蹤
-    st.markdown('<h3 class="section-title">我的追蹤</h3>', unsafe_allow_html=True)
+    # 股票清單
+    stocks = [
+        'NVDA', 'AMD', 'BTC-USD', 'GOOGL', 'TSLA', 
+        'ETH-USD', 'BNB-USD', 'SOL-USD', 'AAPL'
+    ]
     
-    # 獲取股票數據
-    stocks = ['NVDA', 'AMD', 'BTC-USD', 'GOOGL', 'TSLA', 'ETH-USD', 'BNB-USD', 'SOL-USD']
-    stock_data = []
-    
-    for symbol in stocks[:9]:  # 限制9個
-        data = get_stock_data(symbol)
-        stock_data.append(data)
-    
-    # 顯示股票網格
-    st.markdown('<div class="stock-grid">', unsafe_allow_html=True)
-    
-    for stock in stock_data:
-        trend = 'positive' if stock['change_pct'] >= 0 else 'negative'
-        change_sign = '+' if stock['change_pct'] >= 0 else ''
+    for symbol in stocks:
+        data = get_yahoo_price(symbol)
+        
+        # 判斷漲跌
+        is_positive = data['change_pct'] >= 0
+        indicator_class = 'green' if is_positive else 'red'
+        change_class = 'green' if is_positive else 'red'
+        change_sign = '+' if is_positive else ''
         
         # 簡化symbol顯示
-        display_symbol = stock['symbol'].replace('-USD', '').replace('L', '')
+        display_symbol = symbol.replace('-USD', '').replace('L', '')
         
         st.markdown(f"""
-        <div class="stock-item {trend}">
-            <div class="stock-symbol">{display_symbol}</div>
-            <div class="stock-change {trend}">{change_sign}{stock['change_pct']:.1%}</div>
-            <div class="stock-price">${stock['price']:.0f}</div>
+        <div class="stock-item">
+            <div class="stock-left">
+                <div class="stock-indicator {indicator_class}"></div>
+                <div class="stock-info">
+                    <h3>{display_symbol}</h3>
+                    <p class="stock-price">${data['price']:.0f}</p>
+                </div>
+            </div>
+            <div class="stock-change {change_class}">
+                {change_sign}{data['change_pct']:.1f}%
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
-    
-    # 關閉主內容區
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # 底部導航
+
+def create_bottom_nav():
     st.markdown("""
     <div class="bottom-nav">
-        <div class="nav-item active">
+        <div class="nav-btn active">
             <div class="nav-icon">🔵</div>
-            <div class="nav-label">Dashboard</div>
+            Dashboard
         </div>
-        <div class="nav-item">
-            <div class="nav-icon">▶</div>
-            <div class="nav-label">Auto-Guide</div>
+        <div class="nav-btn">
+            <div class="nav-icon">▶️</div>
+            Auto-Guide
         </div>
-        <div class="nav-item">
+        <div class="nav-btn">
             <div class="nav-icon">📊</div>
-            <div class="nav-label">Portfolio</div>
+            Portfolio
         </div>
-        <div class="nav-item">
+        <div class="nav-btn">
             <div class="nav-icon">⭕</div>
-            <div class="nav-label">Subscription</div>
+            Subscription
         </div>
     </div>
     """, unsafe_allow_html=True)
-    
-    # 關閉iPhone容器
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ====== 主程式 ======
 def main():
-    load_iphone_style()
-    create_iphone_layout()
+    load_clean_style()
+    
+    # iPhone框架開始
+    st.markdown('<div class="iphone-frame">', unsafe_allow_html=True)
+    st.markdown('<div class="status-bar">TENKI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content">', unsafe_allow_html=True)
+    
+    # 主要內容
+    create_logo_section()
+    create_sweet_spot_card()
+    create_stock_list()
+    
+    # 關閉內容區
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # 底部導航
+    create_bottom_nav()
+    
+    # 關閉iPhone框架
+    st.markdown('</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
