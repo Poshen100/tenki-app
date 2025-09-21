@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import numpy as np
+st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
 
 # 頁面配置
 st.set_page_config(
