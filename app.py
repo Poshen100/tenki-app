@@ -120,17 +120,7 @@ with st.form("add_stock"):
             st.session_state["portfolio"] = portfolio
             st.success(TEXT["success_add"][LANG])
         else:
-            st.warning(TEXT["stock"][LANG] + " " + TEXT["confirm"][LANG])
-
-# --- 個人化偏好 ---
-st.sidebar.markdown("### " + TEXT["profile"][LANG])
-st.sidebar.markdown(TEXT["investment_pref"][LANG])
-risk = st.sidebar.selectbox(
-    TEXT["risk"][LANG], ["低/Low/低", "中/Medium/中", "高/High/高"])
-goal = st.sidebar.selectbox(
-    TEXT["goal"][LANG], ["成長/Growth/成長", "穩健/Stable/安定", "收益/Income/収益"])
-
-# 這個偏好沒有實際控制甜蜜點，但你可根據需要連動if not st.session_state["user"]:
+            st.warning(TEXT["stock"][LANG] + " " + TEXT["confirm"][if not st.session_state["user"]:
     st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
     st.markdown("<h2 style='text-align: center; margin-top: 0;'>TENKI</h2>", unsafe_allow_html=True)
     st.write("<p style='text-align: center; color: grey;'>Turning Insight into Opportunity</p>", unsafe_allow_html=True)
@@ -144,4 +134,3 @@ goal = st.sidebar.selectbox(
         else:
             st.error(TEXT["login_fail"][LANG])
     st.stop()
-
