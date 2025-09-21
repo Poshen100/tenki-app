@@ -244,58 +244,75 @@ def generate_pivot_insights(t):
 
 # ====== UI設計系統 ======
 def load_premium_design_system():
-    """載入頂級設計系統"""
+    """載入頂級設計系統 - 完全移除頂部空白"""
     st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
+        /* 完全重置 Streamlit 預設樣式 */
+        .main .block-container {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        /* 隱藏所有 Streamlit 預設元素 */
+        #MainMenu, footer, header, .stDeployButton, .stDecoration {
+            visibility: hidden !important;
+            height: 0 !important;
+        }
+        
+        /* 移除頂部空間 */
+        .stApp {
+            margin-top: -100px !important;
+            padding-top: 0 !important;
+        }
+        
+        .stApp > header {
+            height: 0 !important;
+            visibility: hidden !important;
+        }
+        
+        /* 全域字體設定 */
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
         }
         
-        .main .block-container {
-            padding: 1rem 2rem 3rem 2rem;
-            max-width: 1400px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        /* 主要內容容器 */
+        .main-content {
+            padding: 1rem;
+            margin: 0;
+            width: 100%;
         }
         
-        .stApp > header {
-            background-color: transparent;
-        }
-        
-        .stApp {
-            margin-top: -80px;
-        }
-        
-        #MainMenu, footer, header {
-            visibility: hidden !important;
-        }
-        
+        /* 頂部品牌區域 - 完全無空白 */
         .top-banner {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem 1rem;
+            padding: 1rem;
             background: white;
             border-radius: 20px;
-            margin-bottom: 2rem;
+            margin: 0 0 1.5rem 0;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            width: 100%;
         }
         
         .hero-section {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #334155 100%);
-            padding: 4rem 2rem;
-            border-radius: 24px;
-            margin-bottom: 3rem;
+            padding: 3rem 1.5rem;
+            border-radius: 20px;
+            margin: 0 0 2rem 0;
             text-align: center;
             color: white;
-            box-shadow: 0 20px 64px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
         }
         
         .hero-title {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             font-weight: 900;
             letter-spacing: -0.05em;
             margin-bottom: 1rem;
@@ -305,49 +322,50 @@ def load_premium_design_system():
         }
         
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 4vw, 1.3rem);
             color: #cbd5e1;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .section-header {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 16px;
-            margin: 2rem 0 1.5rem 0;
+            margin: 1.5rem 0 1rem 0;
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
         }
         
         .section-header h2 {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 5vw, 2rem);
             font-weight: 800;
             margin-bottom: 0.5rem;
         }
         
         .section-header p {
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 3vw, 1rem);
             opacity: 0.9;
             margin: 0;
         }
         
         .metrics-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 0 0.5rem;
         }
         
         .metric-card {
             background: white;
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
         
         .metric-card::before {
@@ -361,13 +379,13 @@ def load_premium_design_system():
         }
         
         .metric-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
         
         .metric-label {
             color: #64748b;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -375,7 +393,7 @@ def load_premium_design_system():
         }
         
         .metric-value {
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
             font-weight: 800;
             color: #0f172a;
             margin-bottom: 0.8rem;
@@ -383,12 +401,12 @@ def load_premium_design_system():
         }
         
         .metric-change {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
         
         .metric-change.positive { color: #059669; }
@@ -398,15 +416,15 @@ def load_premium_design_system():
         .stock-card {
             background: white;
             border-radius: 16px;
-            padding: 2rem;
-            margin: 1rem 0;
+            padding: 1.5rem;
+            margin: 1rem 0.5rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             border-left: 4px solid #3b82f6;
         }
         
         .stock-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
         
@@ -414,51 +432,51 @@ def load_premium_design_system():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
         
         .stock-symbol {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #1e293b;
         }
         
         .stock-name {
             color: #64748b;
-            font-size: 0.85rem;
-            margin-top: 0.3rem;
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
         }
         
         .stock-price {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: #0f172a;
         }
         
         .stock-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.8rem;
         }
         
         .stock-metric {
             text-align: center;
-            padding: 1rem;
+            padding: 0.8rem;
             background: #f8fafc;
-            border-radius: 12px;
+            border-radius: 10px;
         }
         
         .stock-metric-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #64748b;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
         
         .stock-metric-value {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #1e293b;
         }
@@ -467,8 +485,8 @@ def load_premium_design_system():
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             border: 1px solid #bae6fd;
             border-radius: 16px;
-            padding: 2rem;
-            margin: 1rem 0;
+            padding: 1.5rem;
+            margin: 1rem 0.5rem;
             position: relative;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
@@ -485,7 +503,7 @@ def load_premium_design_system():
         }
         
         .insight-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #0c4a6e;
             margin-bottom: 1rem;
@@ -494,18 +512,19 @@ def load_premium_design_system():
         .insight-content {
             color: #164e63;
             line-height: 1.6;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
         }
         
         .insight-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 0.8rem;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 0.6rem;
         }
         
         .insight-metric {
             text-align: center;
-            padding: 0.8rem;
+            padding: 0.6rem;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
         }
@@ -513,100 +532,134 @@ def load_premium_design_system():
         .roadmap-container {
             background: white;
             border-radius: 20px;
-            padding: 2.5rem;
-            margin: 2rem 0;
+            padding: 2rem 1.5rem;
+            margin: 1.5rem 0.5rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
         
         .roadmap-phase {
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             position: relative;
-            padding-left: 2rem;
+            padding-left: 1.5rem;
         }
         
         .roadmap-phase::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 0.5rem;
-            width: 1rem;
-            height: 1rem;
+            top: 0.4rem;
+            width: 0.8rem;
+            height: 0.8rem;
             background: #3b82f6;
             border-radius: 50%;
         }
         
         .roadmap-phase h3 {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
         
         .roadmap-item {
             display: flex;
             align-items: center;
-            padding: 0.8rem 1rem;
-            margin: 0.4rem 0;
+            padding: 0.6rem 0.8rem;
+            margin: 0.3rem 0;
             background: #f8fafc;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.2s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
         .roadmap-item:hover {
             background: #e2e8f0;
-            transform: translateX(6px);
+            transform: translateX(4px);
         }
         
         .roadmap-item::before {
             content: '●';
             color: #64748b;
-            margin-right: 0.8rem;
-            font-size: 0.7rem;
+            margin-right: 0.6rem;
+            font-size: 0.6rem;
         }
         
         .language-selector {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             justify-content: center;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             flex-wrap: wrap;
+            padding: 0 0.5rem;
         }
         
+        /* 手機端優化 */
         @media (max-width: 768px) {
-            .main .block-container {
-                padding: 1rem 1rem 2rem 1rem;
+            .main-content {
+                padding: 0.5rem;
             }
+            
             .metrics-container {
                 grid-template-columns: 1fr;
+                gap: 0.8rem;
             }
+            
             .stock-metrics {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
             .insight-metrics {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .hero-title {
-                font-size: 2.5rem;
+            
+            .hero-section {
+                padding: 2rem 1rem;
             }
-            .hero-subtitle {
-                font-size: 1.1rem;
+            
+            .section-header {
+                padding: 1rem;
+            }
+            
+            .stock-card, .insight-card {
+                margin: 0.8rem 0;
+            }
+            
+            .roadmap-container {
+                margin: 1rem 0;
+                padding: 1.5rem 1rem;
             }
         }
         
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
+            .main-content {
+                padding: 0.3rem;
             }
-            .section-header h2 {
-                font-size: 1.5rem;
+            
+            .top-banner {
+                padding: 0.8rem;
+                margin: 0 0 1rem 0;
+            }
+            
+            .hero-section {
+                padding: 1.5rem 0.8rem;
+            }
+            
+            .metric-card {
+                padding: 1rem;
+            }
+            
+            .stock-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
             }
         }
     </style>
     """, unsafe_allow_html=True)
 
 def create_top_banner():
-    """創建頂部橫幅 - 使用TENKI品牌圖片"""
+    """創建頂部橫幅 - 完全無空白設計"""
+    st.markdown('<div class="main-content">', unsafe_allow_html=True)
     st.markdown('<div class="top-banner">', unsafe_allow_html=True)
     
     # 嘗試載入圖片的多種方式
@@ -618,17 +671,18 @@ def create_top_banner():
             # 方法2: 使用附件中的圖片
             st.image("image.jpeg", use_container_width=True)
         except:
-            # 方法3: 使用替代的TENKI Logo HTML
+            # 方法3: 使用內嵌的TENKI Logo HTML
             st.markdown("""
-            <div style="text-align: center; padding: 2rem;">
+            <div style="text-align: center;">
                 <div style="display: inline-flex; align-items: center; gap: 1rem;">
                     <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
-                                border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                                box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);">
                         <span style="color: white; font-size: 1.5rem; font-weight: bold;">T</span>
                     </div>
                     <div>
-                        <div style="font-size: 2.5rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem;">TENKI</div>
-                        <div style="font-size: 1.2rem; color: #64748b;">Turning Insight into Opportunity</div>
+                        <div style="font-size: 2.5rem; font-weight: 900; color: #1e293b; margin-bottom: 0.2rem;">TENKI</div>
+                        <div style="font-size: 1.1rem; color: #64748b;">Turning Insight into Opportunity</div>
                     </div>
                 </div>
             </div>
@@ -844,14 +898,14 @@ def create_roadmap_section(t):
 
 # ====== 主應用程式 ======
 def main():
-    # 載入設計系統
+    # 載入完全優化的設計系統
     load_premium_design_system()
     
     # 獲取當前語言設定
     lang = st.session_state.language
     t = TEXTS[lang]
     
-    # 頂部橫幅
+    # 頂部品牌橫幅 - 完全無空白
     create_top_banner()
     
     # 語言選擇器
@@ -877,14 +931,16 @@ def main():
     create_roadmap_section(t)
     
     # 底部資訊
-    st.markdown("---")
     st.markdown(f"""
-    <div style="text-align: center; padding: 2rem; color: #64748b;">
-        <p><strong>TENKI</strong> - {t['tagline']}</p>
-        <p>© 2025 TENKI Financial Intelligence Platform</p>
-        <p style="font-size: 0.8rem; margin-top: 1rem;">
+    <div style="text-align: center; padding: 2rem 1rem; color: #64748b; margin-top: 2rem;">
+        <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
+            <strong>TENKI</strong> - {t['tagline']}
+        </p>
+        <p style="margin-bottom: 1rem;">© 2025 TENKI Financial Intelligence Platform</p>
+        <p style="font-size: 0.8rem; opacity: 0.8;">
             本平台僅供投資參考，投資有風險，請謹慎評估
         </p>
+    </div>
     </div>
     """, unsafe_allow_html=True)
 
