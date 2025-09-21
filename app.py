@@ -4,7 +4,15 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import numpy as np
-st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
+st.markdown(
+    f"""
+    <div style="width: 100vw; margin-left: -8vw; margin-top: -40px; margin-bottom: 12px;">
+        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" 
+             style="width:100vw; max-width:100%; display:block; margin-left: auto; margin-right: auto;">
+    </div>
+    """, unsafe_allow_html=True
+)
+
 
 # 頁面配置
 st.set_page_config(
@@ -295,4 +303,12 @@ st.markdown("""
     <p>投資有風險，入市需謹慎</p>
 </div>
 """, unsafe_allow_html=True)
-st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
+st.markdown(
+    f"""
+    <div style="width: 100vw; margin-left: -8vw; margin-top: -40px; margin-bottom: 12px;">
+        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png" 
+             style="width:100vw; max-width:100%; display:block; margin-left: auto; margin-right: auto;">
+    </div>
+    """, unsafe_allow_html=True
+)
+
