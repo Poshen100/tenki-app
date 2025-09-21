@@ -94,11 +94,10 @@ sweet_spots = [
 idx = random.randint(0, len(sweet_spots)-1)
 spot = sweet_spots[idx]
 st.subheader(TEXT["sweet_spot"][LANG])
-st.write(f\"**{TEXT['theme'][LANG]}:** {spot['theme'][LANG]}\")
-st.write(f\"**{TEXT['insight'][LANG]}:** {spot['insight'][LANG]}\")
-st.write(f\"**{TEXT['targets'][LANG]}:** {', '.join(spot['targets'])}\")
-st.write(f\"**{TEXT['expected_return'][LANG]}:** {spot['expected_return']}\")
-
+st.write(f"**{TEXT['theme'][LANG]}:** {spot['theme'][LANG]}")
+st.write(f"**{TEXT['insight'][LANG]}:** {spot['insight'][LANG]}")
+st.write(f"**{TEXT['targets'][LANG]}:** {', '.join(spot['targets'])}")
+st.write(f"**{TEXT['expected_return'][LANG]}:** {spot['expected_return']}")
 # --- 虛擬組合 ---
 st.subheader(TEXT["virtual_portfolio"][LANG])
 portfolio = st.session_state["portfolio"]
