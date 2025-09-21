@@ -244,7 +244,7 @@ def generate_pivot_insights(t):
 
 # ====== UI設計系統 ======
 def load_premium_design_system():
-    """載入頂級設計系統 - 完全移除頂部空白"""
+    """載入頂級設計系統 - 修復HTML顯示問題"""
     st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -288,7 +288,7 @@ def load_premium_design_system():
             width: 100%;
         }
         
-        /* 頂部品牌區域 - 完全無空白 */
+        /* 頂部品牌區域 */
         .top-banner {
             display: flex;
             justify-content: center;
@@ -529,70 +529,6 @@ def load_premium_design_system():
             border-radius: 8px;
         }
         
-        .roadmap-container {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem 1.5rem;
-            margin: 1.5rem 0.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        }
-        
-        .roadmap-phase {
-            margin-bottom: 2rem;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-        
-        .roadmap-phase::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.4rem;
-            width: 0.8rem;
-            height: 0.8rem;
-            background: #3b82f6;
-            border-radius: 50%;
-        }
-        
-        .roadmap-phase h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.8rem;
-        }
-        
-        .roadmap-item {
-            display: flex;
-            align-items: center;
-            padding: 0.6rem 0.8rem;
-            margin: 0.3rem 0;
-            background: #f8fafc;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-size: 0.85rem;
-        }
-        
-        .roadmap-item:hover {
-            background: #e2e8f0;
-            transform: translateX(4px);
-        }
-        
-        .roadmap-item::before {
-            content: '●';
-            color: #64748b;
-            margin-right: 0.6rem;
-            font-size: 0.6rem;
-        }
-        
-        .language-selector {
-            display: flex;
-            gap: 0.8rem;
-            justify-content: center;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-            padding: 0 0.5rem;
-        }
-        
         /* 手機端優化 */
         @media (max-width: 768px) {
             .main-content {
@@ -622,11 +558,6 @@ def load_premium_design_system():
             
             .stock-card, .insight-card {
                 margin: 0.8rem 0;
-            }
-            
-            .roadmap-container {
-                margin: 1rem 0;
-                padding: 1.5rem 1rem;
             }
         }
         
@@ -865,7 +796,7 @@ def create_pivot_insights_section(insights, t):
         """, unsafe_allow_html=True)
 
 def create_roadmap_section(t):
-    """創建發展路線圖區域"""
+    """創建發展路線圖區域 - 使用Streamlit原生組件避免HTML顯示問題"""
     st.markdown(f"""
     <div class="section-header">
         <h2>🗺️ {t['roadmap']}</h2>
@@ -873,28 +804,65 @@ def create_roadmap_section(t):
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown(f"""
-    <div class="roadmap-container">
-        <div class="roadmap-phase">
-            <h3>1. {t['feature_expansion']}</h3>
-            <div class="roadmap-item">{t['add_more_stocks']}</div>
-            <div class="roadmap-item">{t['add_portfolio']}</div>
-            <div class="roadmap-item">{t['implement_login']}</div>
-        </div>
+    # 使用Streamlit原生組件來避免HTML顯示問題
+    
+    # 第一階段：功能擴展
+    st.markdown("### 🔧 1. 功能擴展")
+    st.markdown("---")
+    
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🔵")
+    with col2:
+        st.markdown("**添加更多股票追蹤**")
         
-        <div class="roadmap-phase">
-            <h3>2. {t['data_enhancement']}</h3>
-            <div class="roadmap-item">{t['integrate_more_apis']}</div>
-            <div class="roadmap-item">{t['add_news_feeds']}</div>
-            <div class="roadmap-item">{t['add_technical_indicators']}</div>
-        </div>
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🔵")
+    with col2:
+        st.markdown("**增加投資組合功能**")
         
-        <div class="roadmap-phase">
-            <h3>3. {t['business_preparation']}</h3>
-            <div class="roadmap-item">{t['add_subscription']}</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🔵")
+    with col2:
+        st.markdown("**實現用戶登入系統**")
+    
+    st.markdown("")
+    
+    # 第二階段：數據豐富化
+    st.markdown("### 📈 2. 數據豐富化")
+    st.markdown("---")
+    
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🟢")
+    with col2:
+        st.markdown("**整合更多金融API**")
+        
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🟢")
+    with col2:
+        st.markdown("**添加新聞資訊**")
+        
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🟢")
+    with col2:
+        st.markdown("**增加技術指標**")
+    
+    st.markdown("")
+    
+    # 第三階段：商業化準備
+    st.markdown("### 💰 3. 商業化準備")
+    st.markdown("---")
+    
+    col1, col2 = st.columns([0.1, 0.9])
+    with col1:
+        st.markdown("🟡")
+    with col2:
+        st.markdown("**訂閱付費功能**")
 
 # ====== 主應用程式 ======
 def main():
@@ -927,7 +895,7 @@ def main():
     insights = generate_pivot_insights(t)
     create_pivot_insights_section(insights, t)
     
-    # 發展路線圖
+    # 發展路線圖 - 使用修復後的版本
     create_roadmap_section(t)
     
     # 底部資訊
