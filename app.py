@@ -184,6 +184,7 @@ def load_premium_design_system():
             height: 48px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
         }
         
         .nav-brand {
@@ -241,6 +242,7 @@ def load_premium_design_system():
             border-radius: 20px;
             filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.5));
             animation: heroFloat 6s ease-in-out infinite;
+            object-fit: cover;
         }
         
         @keyframes heroFloat {
@@ -551,6 +553,42 @@ def load_premium_design_system():
             text-align: center;
         }
         
+        /* === 語言選擇按鈕 === */
+        .language-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .lang-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .lang-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+        
+        .lang-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
         /* === 響應式設計 === */
         @media (max-width: 768px) {
             .main .block-container {
@@ -574,6 +612,10 @@ def load_premium_design_system():
                 grid-template-columns: 1fr;
                 gap: 0.5rem;
                 text-align: center;
+            }
+            
+            .language-buttons {
+                flex-direction: column;
             }
         }
         
@@ -602,7 +644,7 @@ def create_top_navigation(t):
     st.markdown(f"""
     <div class="top-navigation">
         <div class="nav-logo">
-            <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/image.jpeg" alt="TENKI Logo" class="nav-logo-img">
+            <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0640.jpeg" alt="TENKI Logo" class="nav-logo-img">
             <div class="nav-brand">{t['app_name']}</div>
         </div>
     </div>
@@ -614,7 +656,7 @@ def create_hero_section(t):
     <div class="hero-section">
         <div class="hero-content">
             <div class="hero-logo-container">
-                <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/image.jpeg" alt="TENKI Logo" class="hero-logo">
+                <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0640.jpeg" alt="TENKI Logo" class="hero-logo">
             </div>
             <h1 class="hero-title">{t['app_name']}</h1>
             <p class="hero-subtitle">{t['tagline']}</p>
@@ -673,36 +715,40 @@ def create_insight_card(insight):
     </div>
     """
 
-# ====== 語言選擇器（修正版） ======
+# ====== 語言選擇器（美化版） ======
 def language_selector():
     """語言選擇器"""
     st.markdown("### 🌐 語言選擇")
     
-    # 創建語言選擇按鈕
-    current_lang_display = None
-    for display, code in LANGUAGES.items():
-        if code == st.session_state.language:
-            current_lang_display = display
-            break
-    
+    # 語言按鈕
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("🇹🇼 繁體中文", use_container_width=True):
+        if st.button("🇹🇼 繁體中文", use_container_width=True, 
+                     type="primary" if st.session_state.language == 'zh' else "secondary"):
             st.session_state.language = 'zh'
             st.rerun()
     
     with col2:
-        if st.button("🇺🇸 English", use_container_width=True):
+        if st.button("🇺🇸 English", use_container_width=True,
+                     type="primary" if st.session_state.language == 'en' else "secondary"):
             st.session_state.language = 'en'
             st.rerun()
     
     with col3:
-        if st.button("🇯🇵 日本語", use_container_width=True):
+        if st.button("🇯🇵 日本語", use_container_width=True,
+                     type="primary" if st.session_state.language == 'jp' else "secondary"):
             st.session_state.language = 'jp'
             st.rerun()
     
-    st.markdown(f"**當前語言:** {current_lang_display}")
+    # 顯示當前語言
+    current_lang_name = {
+        'zh': '🇹🇼 繁體中文',
+        'en': '🇺🇸 English',
+        'jp': '🇯🇵 日本語'
+    }
+    
+    st.info(f"**當前語言:** {current_lang_name[st.session_state.language]}")
 
 # ====== 主應用程式 ======
 def main():
@@ -895,8 +941,8 @@ if __name__ == "__main__":
     # 頁腳
     st.markdown("""
     <div style="margin-top: 4rem; text-align: center; padding: 3rem 0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 24px;">
-        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/image.jpeg" 
-             style="width: 60px; height: 60px; border-radius: 12px; margin-bottom: 1rem; opacity: 0.8;">
+        <img src="https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0640.jpeg" 
+             style="width: 60px; height: 60px; border-radius: 12px; margin-bottom: 1rem; opacity: 0.8; object-fit: cover;">
         <div style="color: #64748b; font-weight: 500; margin-bottom: 0.5rem;">
             <strong>投資有風險，入市需謹慎</strong>
         </div>
