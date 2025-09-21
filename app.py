@@ -1,134 +1,294 @@
 import streamlit as st
-import random
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from datetime import datetime
+import numpy as np
 
-# --- 多語言詞典 ---
-TEXT = {
-    "login_title": {
-        "zh": "登入你的 TENKI 戶口",
-        "en": "Sign in to Your TENKI Account",
-        "jp": "TENKIアカウントにログイン"
-    },
-    "username": {"zh":"電子郵件", "en":"Email", "jp":"メールアドレス"},
-    "password": {"zh":"密碼", "en":"Password", "jp":"パスワード"},
-    "btn_login": {"zh":"登入", "en":"Login", "jp":"ログイン"},
-    "btn_logout": {"zh":"登出", "en":"Logout", "jp":"ログアウト"},
-    "login_success": {"zh":"登入成功！", "en":"Login successful!", "jp":"ログイン成功！"},
-    "login_fail": {"zh":"帳號或密碼錯誤", "en":"Wrong username or password", "jp":"ユーザー名またはパスワードが違います"},
+# 頁面配置
+st.set_page_config(
+    page_title="TENKI - Investment Advisory",
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
-    "dashboard": {"zh":"甜蜜點/投資儀表板", "en":"Sweet Spot / Dashboard", "jp":"スウィートスポット・ダッシュボード"},
-    "switch_lang": {"zh":"語言切換", "en":"Language", "jp":"言語切替"},
-    "profile": {"zh":"個人設定", "en":"Profile", "jp":"プロフィール"},
-    "virtual_portfolio": {"zh":"虛擬組合", "en":"Virtual Portfolio", "jp":"バーチャルポートフォリオ"},
-    "sweet_spot": {"zh":"今日甜蜜點", "en":"Today's Sweet Spot", "jp":"本日のスウィートスポット"},
-    "add_stock": {"zh": "新增持股", "en":"Add holding", "jp":"銘柄追加"},
-    "stock": {"zh":"股票代號", "en":"Stock", "jp":"銘柄"},
-    "qty": {"zh":"股數", "en":"Quantity", "jp":"株数"},
-    "confirm": {"zh":"確認", "en":"Confirm", "jp":"確認"},
-    "success_add": {"zh":"已加入虛擬組合", "en":"Added to virtual portfolio", "jp":"バーチャルポートフォリオに追加されました"},
-    "theme": {"zh":"主題", "en":"Theme", "jp":"テーマ"},
-    "insight": {"zh":"洞察", "en":"Insight", "jp":"インサイト"},
-    "targets": {"zh":"重點標的", "en":"Targets", "jp":"ターゲット"},
-    "expected_return": {"zh":"預期報酬", "en":"Expected Return", "jp":"予想リターン"},
-    "investment_pref": {"zh":"投資偏好設定", "en":"Investment Preferences", "jp":"投資設定"},
-    "risk": {"zh":"風險承受度", "en":"Risk Level", "jp":"リスク許容度"},
-    "goal": {"zh":"投資目標", "en":"Investment Goal", "jp":"投資目標"}
+# 自定義CSS樣式
+st.markdown("""
+<style>
+    /* 隱藏Streamlit默認元素 */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* 主容器樣式 */
+    .main .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        max-width: 1200px;
+    }
+    
+    /* 標題樣式 */
+    .main-header {
+        background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;
+    }
+    
+    .logo-title {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .tagline {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+    
+    /* Hero卡片樣式 */
+    .hero-card {
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        color: white;
+        margin: 2rem 0;
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+    }
+    
+    .hero-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .content-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .insight-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        opacity: 0.95;
+    }
+    
+    /* 按鈕樣式 */
+    .stButton > button {
+        background: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.2s ease;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(251, 146, 60, 0.5);
+    }
+    
+    /* 指標卡片樣式 */
+    .metric-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-left: 4px solid #1E3A8A;
+        margin: 1rem 0;
+    }
+    
+    /* 表格樣式 */
+    .stock-table {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# 主標題區域
+st.markdown("""
+<div class="main-header">
+    <div class="logo-title">TENKI</div>
+    <div class="tagline">Turning Insight into Opportunity</div>
+</div>
+""", unsafe_allow_html=True)
+
+# Hero區域
+st.markdown("""
+<div class="hero-card">
+    <div class="hero-title">✨ 今日轉機 (Today's Sweet Spot)</div>
+    <div class="content-title">美股區塊鏈概念股</div>
+    <div class="insight-text">比特幣ETF熱潮帶動，預期Q4漲幅15-20%</div>
+</div>
+""", unsafe_allow_html=True)
+
+# 行動按鈕
+if st.button("查看完整解決方案", key="main_cta"):
+    st.success("🎯 正在為您準備完整的投資解決方案...")
+
+# 創建三欄佈局
+col1, col2, col3 = st.columns(3)
+
+# 模擬數據
+stock_data = {
+    'Symbol': ['COIN', 'MSTR', 'RIOT', 'MARA', 'BTBT'],
+    'Name': ['Coinbase Global', 'MicroStrategy', 'Riot Blockchain', 'Marathon Digital', 'Bit Digital'],
+    'Price': [156.42, 1247.85, 8.94, 15.73, 2.89],
+    'Change': [2.8, 5.2, 1.4, -0.8, 3.1],
+    'Volume': ['2.1M', '145K', '5.8M', '12.3M', '3.2M']
 }
 
-LANGS = {"繁體中文":"zh", "日本語":"jp", "English":"en"}
+df = pd.DataFrame(stock_data)
 
-# --- 語言切換 ---
-if "ui_lang" not in st.session_state:
-    st.session_state["ui_lang"] = "zh"
+# 關鍵指標
+with col1:
+    st.markdown("### 📊 市場概況")
+    st.metric("比特幣價格", "$67,234", "2.1%", delta_color="normal")
+    st.metric("區塊鏈指數", "1,284", "3.4%", delta_color="normal")
 
-lang_selection = st.sidebar.selectbox(
-    TEXT["switch_lang"][st.session_state["ui_lang"]],
-    options=list(LANGS.keys()),
-    format_func=lambda x: x,
-    index=list(LANGS.values()).index(st.session_state["ui_lang"])
+with col2:
+    st.markdown("### 🎯 投資組合表現")
+    st.metric("總收益", "$12,456", "8.7%", delta_color="normal")
+    st.metric("今日收益", "$856", "1.2%", delta_color="normal")
+
+with col3:
+    st.markdown("### ⭐ 推薦評級")
+    st.metric("強力買入", "3 檔", "")
+    st.metric("買入", "2 檔", "")
+
+# 股票追蹤表格
+st.markdown("## 💼 我的追蹤")
+
+# 添加顏色編碼的變化率
+def color_change(val):
+    if val > 0:
+        return f'<span style="color: #16a34a; font-weight: bold;">+{val}%</span>'
+    else:
+        return f'<span style="color: #dc2626; font-weight: bold;">{val}%</span>'
+
+# 創建格式化的DataFrame
+df_display = df.copy()
+df_display['Change'] = df_display['Change'].apply(color_change)
+df_display['Price'] = df_display['Price'].apply(lambda x: f'${x:,.2f}')
+
+# 顯示表格
+st.markdown('<div class="stock-table">', unsafe_allow_html=True)
+st.markdown("### 📈 區塊鏈概念股動態")
+
+for idx, row in df.iterrows():
+    col_sym, col_name, col_price, col_change, col_vol = st.columns([1, 2, 1.5, 1, 1])
+    
+    with col_sym:
+        st.markdown(f"**{row['Symbol']}**")
+    with col_name:
+        st.markdown(row['Name'])
+    with col_price:
+        st.markdown(f"${row['Price']:,.2f}")
+    with col_change:
+        change_color = "#16a34a" if row['Change'] > 0 else "#dc2626"
+        sign = "+" if row['Change'] > 0 else ""
+        st.markdown(f'<span style="color: {change_color}; font-weight: bold;">{sign}{row["Change"]}%</span>', 
+                   unsafe_allow_html=True)
+    with col_vol:
+        st.markdown(row['Volume'])
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# 圖表區域
+st.markdown("## 📊 價格走勢分析")
+
+# 創建模擬價格數據
+dates = pd.date_range(start='2024-01-01', end='2024-09-21', freq='D')
+np.random.seed(42)
+price_data = []
+
+for symbol in ['COIN', 'MSTR', 'RIOT']:
+    base_price = stock_data[stock_data['Symbol'] == symbol]['Price'].iloc[0]
+    prices = []
+    current_price = base_price * 0.8  # 從較低價格開始
+    
+    for _ in dates:
+        change = np.random.normal(0, 0.02)  # 2%的日變動標準差
+        current_price *= (1 + change)
+        prices.append(current_price)
+    
+    for i, date in enumerate(dates):
+        price_data.append({
+            'Date': date,
+            'Symbol': symbol,
+            'Price': prices[i]
+        })
+
+price_df = pd.DataFrame(price_data)
+
+# 創建互動式圖表
+fig = px.line(price_df, x='Date', y='Price', color='Symbol', 
+              title='區塊鏈概念股價格走勢',
+              labels={'Price': '股價 (USD)', 'Date': '日期'})
+
+fig.update_layout(
+    plot_bgcolor='white',
+    paper_bgcolor='white',
+    font=dict(size=12),
+    title_font_size=16,
+    height=500
 )
-st.session_state["ui_lang"] = LANGS[lang_selection]
-LANG = st.session_state["ui_lang"]
 
-# --- 假用戶資料 & Session 狀態
-DEMO_USER = {"email":"demo@tenki.jp", "password":"pass123"}
-if "user" not in st.session_state:
-    st.session_state["user"] = None
-if "portfolio" not in st.session_state:
-    st.session_state["portfolio"] = {}
+st.plotly_chart(fig, use_container_width=True)
 
-# --- 登入頁（加上Logo） ---
-if not st.session_state["user"]:
-    st.image("https://raw.githubusercontent.com/Poshen100/tenki-app/main/IMG_0638.png", width=220)
-    st.markdown("<h2 style='text-align: center; margin-top: 0;'>TENKI</h2>", unsafe_allow_html=True)
-    st.write("<p style='text-align: center; color: grey;'>Turning Insight into Opportunity</p>", unsafe_allow_html=True)
-    st.subheader(TEXT["login_title"][LANG])
-    user = st.text_input(TEXT["username"][LANG])
-    pw = st.text_input(TEXT["password"][LANG], type="password")
-    if st.button(TEXT["btn_login"][LANG]):
-        if user == DEMO_USER["email"] and pw == DEMO_USER["password"]:
-            st.success(TEXT["login_success"][LANG])
-            st.session_state["user"] = user
-        else:
-            st.error(TEXT["login_fail"][LANG])
-    st.stop()
+# 底部導航模擬
+st.markdown("---")
+nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
 
-# --- 登出 ---
-if st.button(TEXT["btn_logout"][LANG]):
-    st.session_state["user"] = None
-    st.experimental_rerun()
+with nav_col1:
+    st.markdown("**🏠 Dashboard**")
+with nav_col2:
+    if st.button("🎯 Auto-Guide"):
+        st.info("自動投資指引功能開發中...")
+with nav_col3:
+    if st.button("💼 Portfolio"):
+        st.info("投資組合詳情功能開發中...")
+with nav_col4:
+    if st.button("⭐ Subscription"):
+        st.info("訂閱服務功能開發中...")
 
-st.title(TEXT["dashboard"][LANG])
+# 側邊欄（可選）
+with st.sidebar:
+    st.markdown("## ⚙️ 設置")
+    
+    # 語言選擇
+    language = st.selectbox("語言 / Language", ["繁體中文", "English"])
+    
+    # 主題模式
+    theme = st.selectbox("主題模式", ["亮色主題", "暗色主題"])
+    
+    # 通知設置
+    st.markdown("### 🔔 通知設置")
+    price_alerts = st.checkbox("價格提醒", value=True)
+    news_alerts = st.checkbox("新聞提醒", value=True)
+    report_alerts = st.checkbox("研報提醒", value=False)
+    
+    st.markdown("---")
+    st.markdown("**版本:** v1.0.0")
+    st.markdown("**最後更新:** 2024-09-21")
 
-# --- 今日甜蜜點範例 ---
-sweet_spots = [
-    {"theme":{"zh":"美股區塊鏈概念股","en":"US Blockchain Stocks","jp":"米国ブロックチェーン関連"}, 
-     "insight": {"zh":"比特幣ETF熱潮帶動Q4漲勢", "en":"BTC ETF hot drives up Q4", "jp":"ビットコインETFが相場を牽引"}, 
-     "targets": ["COIN", "MSTR"], 
-     "expected_return": "15-20%"},
-    {"theme":{"zh":"短期公司債佈局","en":"Short-Term Bonds","jp":"短期債券戦略境"}, 
-     "insight": {"zh":"高利息利率、波動小", "en":"High yield, lower risk", "jp":"高利回りで低リスク"}, 
-     "targets":["LQD ETF"], 
-     "expected_return":"4-6%"}
-]
-
-idx = random.randint(0, len(sweet_spots)-1)
-spot = sweet_spots[idx]
-st.subheader(TEXT["sweet_spot"][LANG])
-st.write(f"**{TEXT['theme'][LANG]}:** {spot['theme'][LANG]}")
-st.write(f"**{TEXT['insight'][LANG]}:** {spot['insight'][LANG]}")
-st.write(f"**{TEXT['targets'][LANG]}:** {', '.join(spot['targets'])}")
-st.write(f"**{TEXT['expected_return'][LANG]}:** {spot['expected_return']}")
-# --- 虛擬組合 ---
-st.subheader(TEXT["virtual_portfolio"][LANG])
-portfolio = st.session_state["portfolio"]
-if portfolio:
-    st.table(
-        {TEXT["stock"][LANG]: list(portfolio.keys()), 
-         TEXT["qty"][LANG]: list(portfolio.values())}
-    )
-else:
-    st.info(TEXT["virtual_portfolio"][LANG] + " (" + TEXT["profile"][LANG] + "): 空")
-
-# --- 新增持股 ---
-st.markdown("### " + TEXT["add_stock"][LANG])
-with st.form("add_stock"):
-    stock = st.text_input(TEXT["stock"][LANG])
-    qty = st.number_input(TEXT["qty"][LANG], min_value=1, value=1)
-    submitted = st.form_submit_button(TEXT["confirm"][LANG])
-    if submitted:
-        if stock:
-            portfolio[stock.upper()] = portfolio.get(stock.upper(), 0) + int(qty)
-            st.session_state["portfolio"] = portfolio
-            st.success(TEXT["success_add"][LANG])
-        else:
-            st.warning(TEXT["stock"][LANG] + " " + TEXT["confirm"][LANG])
-
-# --- 個人化偏好 ---
-st.sidebar.markdown("### " + TEXT["profile"][LANG])
-st.sidebar.markdown(TEXT["investment_pref"][LANG])
-risk = st.sidebar.selectbox(
-    TEXT["risk"][LANG], ["低/Low/低", "中/Medium/中", "高/High/高"])
-goal = st.sidebar.selectbox(
-    TEXT["goal"][LANG], ["成長/Growth/成長", "穩健/Stable/安定", "收益/Income/収益"])
-
-# 這個偏好沒有實際控制甜蜜點，但你可根據需要連動
+# 頁腳
+st.markdown("""
+---
+<div style='text-align: center; color: #64748b; padding: 2rem;'>
+    <p>© 2024 TENKI Investment Advisory. All rights reserved.</p>
+    <p>投資有風險，入市需謹慎</p>
+</div>
+""", unsafe_allow_html=True)
