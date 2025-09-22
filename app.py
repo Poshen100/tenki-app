@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 import plotly.graph_objects as go
 import plotly.express as px
 import pytz
-from threading import Timer
+import base64
 
 # ====== 頁面配置 ======
 st.set_page_config(
@@ -145,86 +145,99 @@ if 'refresh_counter' not in st.session_state:
 # ====== 市場時間檢查 ======
 def is_market_open():
     """檢查美股市場是否開市"""
-    ny_tz = pytz.timezone('America/New_York')
-    now = datetime.now(ny_tz)
-    
-    # 檢查是否為週末
-    if now.weekday() >= 5:  # 週六、週日
-        return False
-    
-    # 市場時間: 9:30 AM - 4:00 PM ET
-    market_open = now.replace(hour=9, minute=30, second=0, microsecond=0)
-    market_close = now.replace(hour=16, minute=0, second=0, microsecond=0)
-    
-    return market_open <= now <= market_close
+    try:
+        ny_tz = pytz.timezone('America/New_York')
+        now = datetime.now(ny_tz)
+        
+        # 檢查是否為週末
+        if now.weekday() >= 5:  # 週六、週日
+            return False
+        
+        # 市場時間: 9:30 AM - 4:00 PM ET
+        market_open = now.replace(hour=9, minute=30, second=0, microsecond=0)
+        market_close = now.replace(hour=16, minute=0, second=0, microsecond=0)
+        
+        return market_open <= now <= market_close
+    except:
+        return True  # 預設假設市場開放
 
 def get_market_status(t):
     """獲取市場狀態文字"""
     return t['market_open'] if is_market_open() else t['market_closed']
 
-# ====== 改進的數據獲取系統 ======
+# ====== 修復的期貨數據獲取系統 ======
 @st.cache_data(ttl=30, show_spinner=False)
-def get_enhanced_futures_data():
-    """獲取增強的期貨指數數據"""
+def get_fixed_futures_data():
+    """修復的期貨指數數據獲取 - 使用多重備援策略"""
+    
+    # 使用多個可能的期貨代碼進行備援
     futures_symbols = {
-        'ES': 'ES=F',  # S&P 500 期貨
-        'NQ': 'NQ=F',  # NASDAQ 期貨
-        'YM': 'YM=F'   # Dow Jones 期貨
+        'ES': ['ES=F', '^GSPC', 'SPY'],  # S&P 500 多重備援
+        'NQ': ['NQ=F', '^IXIC', 'QQQ'],  # NASDAQ 多重備援  
+        'YM': ['YM=F', '^DJI', 'DIA']    # Dow Jones 多重備援
     }
     
     futures_data = {}
     
-    def fetch_enhanced_future(symbol_key, symbol):
-        try:
-            ticker = yf.Ticker(symbol)
-            
-            # 獲取最近2天的分鐘級數據
-            hist = ticker.history(period="2d", interval="1m")
-            if hist.empty:
-                hist = ticker.history(period="5d", interval="5m")
-            
-            if not hist.empty:
-                current = hist['Close'].iloc[-1]
+    def fetch_futures_with_backup(symbol_key, symbol_list):
+        """使用備援策略獲取期貨數據"""
+        for symbol in symbol_list:
+            try:
+                ticker = yf.Ticker(symbol)
                 
-                # 獲取前一個交易日的收盤價
-                if len(hist) > 1:
-                    # 尋找前一個交易日的最後價格
-                    previous_day_data = hist[:-390] if len(hist) > 390 else hist[:-1]  # 390分鐘 = 6.5小時
-                    if not previous_day_data.empty:
-                        prev_close = previous_day_data['Close'].iloc[-1]
-                    else:
-                        prev_close = hist['Close'].iloc[0]
-                else:
-                    prev_close = current
-                
-                change = current - prev_close
-                change_pct = (change / prev_close) * 100 if prev_close != 0 else 0
-                
-                # 計算當日成交量
-                volume = hist['Volume'].sum() if 'Volume' in hist.columns else 0
-                
-                # 獲取額外資訊
+                # 嘗試獲取最新數據
+                hist = ticker.history(period="5d", interval="1d")  # 改用日線數據
                 info = ticker.info
                 
-                return {
-                    'symbol': symbol_key,
-                    'price': float(current),
-                    'change': float(change),
-                    'change_pct': float(change_pct),
-                    'volume': int(volume),
-                    'prev_close': float(prev_close),
-                    'high': float(hist['High'].max()),
-                    'low': float(hist['Low'].min()),
-                    'timestamp': datetime.now()
-                }
-        except Exception as e:
-            print(f"Error fetching {symbol}: {e}")
+                if not hist.empty and len(hist) >= 2:
+                    current = hist['Close'].iloc[-1]
+                    prev_close = hist['Close'].iloc[-2]  # 前一交易日收盤價
+                    
+                    # 如果是期貨，嘗試獲取更準確的數據
+                    if '=F' in symbol:
+                        # 嘗試分鐘數據
+                        minute_hist = ticker.history(period="1d", interval="1m")
+                        if not minute_hist.empty:
+                            current = minute_hist['Close'].iloc[-1]
+                    
+                    change = current - prev_close
+                    change_pct = (change / prev_close) * 100 if prev_close != 0 else 0
+                    
+                    # 確保變化不為0（除非真的沒變化）
+                    if abs(change) < 0.01:
+                        # 嘗試使用盤前數據或延伸時間數據
+                        extended_hist = ticker.history(period="2d", interval="1m")
+                        if not extended_hist.empty and len(extended_hist) > 1:
+                            current = extended_hist['Close'].iloc[-1]
+                            prev_close = extended_hist['Close'].iloc[-390] if len(extended_hist) > 390 else extended_hist['Close'].iloc[0]
+                            change = current - prev_close
+                            change_pct = (change / prev_close) * 100 if prev_close != 0 else 0
+                    
+                    volume = hist['Volume'].iloc[-1] if 'Volume' in hist.columns else 0
+                    
+                    return {
+                        'symbol': symbol_key,
+                        'price': float(current),
+                        'change': float(change),
+                        'change_pct': float(change_pct),
+                        'volume': int(volume) if volume and not np.isnan(volume) else 0,
+                        'prev_close': float(prev_close),
+                        'high': float(hist['High'].iloc[-1]),
+                        'low': float(hist['Low'].iloc[-1]),
+                        'timestamp': datetime.now(),
+                        'source': symbol  # 記錄數據源
+                    }
+                
+            except Exception as e:
+                print(f"Error fetching {symbol}: {e}")
+                continue
+                
         return None
     
     # 並行獲取數據
     with ThreadPoolExecutor(max_workers=3) as executor:
-        futures = [executor.submit(fetch_enhanced_future, k, v) for k, v in futures_symbols.items()]
-        for future in futures:
+        futures_list = [executor.submit(fetch_futures_with_backup, k, v) for k, v in futures_symbols.items()]
+        for future in futures_list:
             result = future.result()
             if result:
                 futures_data[result['symbol']] = result
@@ -247,18 +260,18 @@ def get_enhanced_crypto_data():
             ticker = yf.Ticker(symbol)
             
             # 獲取最近的數據
-            hist = ticker.history(period="2d", interval="1m")
+            hist = ticker.history(period="2d", interval="1h")  # 使用小時數據更可靠
             if hist.empty:
-                hist = ticker.history(period="5d", interval="5m")
+                hist = ticker.history(period="5d", interval="1d")
             
             info = ticker.info
             
-            if not hist.empty:
+            if not hist.empty and len(hist) >= 2:
                 current = hist['Close'].iloc[-1]
                 
                 # 計算24小時變化
-                day_ago_idx = max(0, len(hist) - 1440)  # 1440分鐘 = 24小時
-                prev_close = hist['Close'].iloc[day_ago_idx] if day_ago_idx > 0 else hist['Close'].iloc[0]
+                day_ago_idx = max(0, len(hist) - 24) if len(hist) > 24 else 0
+                prev_close = hist['Close'].iloc[day_ago_idx]
                 
                 change = current - prev_close
                 change_pct = (change / prev_close) * 100 if prev_close != 0 else 0
@@ -272,7 +285,7 @@ def get_enhanced_crypto_data():
                     'price': float(current),
                     'change': float(change),
                     'change_pct': float(change_pct),
-                    'volume': int(volume_24h),
+                    'volume': int(volume_24h) if volume_24h and not np.isnan(volume_24h) else 0,
                     'market_cap': int(market_cap) if market_cap else 0,
                     'high_24h': float(hist['High'].max()),
                     'low_24h': float(hist['Low'].min()),
@@ -296,9 +309,9 @@ def get_enhanced_crypto_data():
 def get_enhanced_forex_commodities_bonds():
     """獲取增強的外匯、商品、債券數據"""
     symbols = {
-        'USDJPY': 'USDJPY=X',  # 美元/日圓
-        'GOLD': 'GC=F',        # 黃金期貨
-        'TNX': '^TNX'          # 10年期美國公債
+        'USDJPY': 'USDJPY=X',  
+        'GOLD': 'GC=F',        
+        'TNX': '^TNX'          
     }
     
     data = {}
@@ -306,33 +319,26 @@ def get_enhanced_forex_commodities_bonds():
     def fetch_enhanced_asset(symbol_key, symbol):
         try:
             ticker = yf.Ticker(symbol)
-            hist = ticker.history(period="2d", interval="1m")
-            if hist.empty:
-                hist = ticker.history(period="5d", interval="5m")
-            
+            hist = ticker.history(period="5d", interval="1d")
             info = ticker.info
             
-            if not hist.empty:
+            if not hist.empty and len(hist) >= 2:
                 current = hist['Close'].iloc[-1]
-                
-                # 獲取前一個交易日收盤價
-                prev_close = info.get('previousClose', hist['Close'].iloc[0])
-                if prev_close == current and len(hist) > 1:
-                    prev_close = hist['Close'].iloc[-2]
+                prev_close = hist['Close'].iloc[-2]
                 
                 change = current - prev_close
                 change_pct = (change / prev_close) * 100 if prev_close != 0 else 0
                 
-                volume = hist['Volume'].sum() if 'Volume' in hist.columns else 0
+                volume = hist['Volume'].iloc[-1] if 'Volume' in hist.columns else 0
                 
                 return {
                     'symbol': symbol_key,
                     'price': float(current),
                     'change': float(change),
                     'change_pct': float(change_pct),
-                    'volume': int(volume),
-                    'high': float(hist['High'].max()),
-                    'low': float(hist['Low'].min()),
+                    'volume': int(volume) if volume and not np.isnan(volume) else 0,
+                    'high': float(hist['High'].iloc[-1]),
+                    'low': float(hist['Low'].iloc[-1]),
                     'timestamp': datetime.now()
                 }
         except Exception as e:
@@ -352,11 +358,9 @@ def get_enhanced_forex_commodities_bonds():
 @st.cache_data(ttl=300, show_spinner=False)
 def get_enhanced_hot_stocks():
     """獲取增強的熱門股票數據"""
-    # 擴展的熱門股票清單
     popular_stocks = [
         'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX',
-        'COIN', 'AMD', 'BABA', 'PLTR', 'MSTR', 'RIOT', 'GME', 'AMC',
-        'SHOP', 'SQ', 'PYPL', 'ZM', 'PTON', 'ARKK', 'SPCE', 'NIO'
+        'COIN', 'AMD', 'BABA', 'PLTR', 'MSTR', 'RIOT', 'GME', 'AMC'
     ]
     
     stocks_data = []
@@ -364,24 +368,19 @@ def get_enhanced_hot_stocks():
     def fetch_enhanced_stock(symbol):
         try:
             ticker = yf.Ticker(symbol)
-            hist = ticker.history(period="2d", interval="1m")
-            if hist.empty:
-                hist = ticker.history(period="5d", interval="5m")
-                
+            hist = ticker.history(period="2d", interval="1d")
             info = ticker.info
             
-            if not hist.empty:
+            if not hist.empty and len(hist) >= 2:
                 current = hist['Close'].iloc[-1]
-                prev_close = info.get('previousClose', hist['Close'].iloc[0])
-                
-                if prev_close == current and len(hist) > 1:
-                    prev_close = hist['Close'].iloc[-2]
+                prev_close = hist['Close'].iloc[-2]
                 
                 change = current - prev_close
                 change_pct = (change / prev_close) * 100 if prev_close != 0 else 0
                 
-                # 計算當日總成交量
-                volume = hist['Volume'].sum()
+                # 獲取當日分鐘數據來計算成交量
+                today_hist = ticker.history(period="1d", interval="1m")
+                volume = today_hist['Volume'].sum() if not today_hist.empty else hist['Volume'].iloc[-1]
                 
                 return {
                     'symbol': symbol,
@@ -389,10 +388,10 @@ def get_enhanced_hot_stocks():
                     'price': float(current),
                     'change': float(change),
                     'change_pct': float(change_pct),
-                    'volume': int(volume),
+                    'volume': int(volume) if volume and not np.isnan(volume) else 0,
                     'market_cap': info.get('marketCap', 0),
-                    'high': float(hist['High'].max()),
-                    'low': float(hist['Low'].min()),
+                    'high': float(hist['High'].iloc[-1]),
+                    'low': float(hist['Low'].iloc[-1]),
                     'timestamp': datetime.now()
                 }
         except Exception as e:
@@ -400,7 +399,7 @@ def get_enhanced_hot_stocks():
         return None
     
     # 並行獲取股票數據
-    with ThreadPoolExecutor(max_workers=15) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(fetch_enhanced_stock, symbol) for symbol in popular_stocks]
         for future in futures:
             result = future.result()
@@ -409,11 +408,11 @@ def get_enhanced_hot_stocks():
     
     # 按成交量排序
     stocks_data.sort(key=lambda x: x['volume'], reverse=True)
-    return stocks_data[:12]  # 返回前12名
+    return stocks_data[:12]
 
-# ====== 專業交易平台設計系統 ======
-def load_professional_trading_design():
-    """載入專業交易平台設計"""
+# ====== 修復的專業交易平台設計系統 ======
+def load_fixed_professional_design():
+    """載入修復的專業交易平台設計"""
     st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -424,6 +423,7 @@ def load_professional_trading_design():
             margin: 0 !important;
             max-width: 100% !important;
             background: #0a0e1a;
+            position: relative;
         }
         
         #MainMenu, footer, header, .stDeployButton, .stDecoration {
@@ -434,22 +434,38 @@ def load_professional_trading_design():
         .stApp {
             margin-top: -100px !important;
             background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+            min-height: 100vh;
             position: relative;
         }
         
-        /* 背景Logo浮水印 */
-        .stApp::before {
+        /* 修復的背景浮水印 */
+        .stApp::after {
             content: '';
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="rgba(59,130,246,0.1)" stroke-width="2"/><path d="M20 35 C30 25, 70 25, 80 35 C85 40, 85 50, 80 55 C70 65, 30 65, 20 55 C15 50, 15 40, 20 35 Z" fill="rgba(59,130,246,0.08)"/><text x="50" y="75" text-anchor="middle" fill="rgba(59,130,246,0.1)" font-size="8" font-weight="bold">TENKI</text></svg>') no-repeat center center;
-            background-size: contain;
-            z-index: -1;
+            width: 350px;
+            height: 350px;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+            border: 2px solid rgba(59,130,246,0.1);
+            border-radius: 50%;
+            z-index: 0;
             pointer-events: none;
+        }
+        
+        .stApp::before {
+            content: 'TENKI';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(59,130,246,0.05);
+            z-index: 0;
+            pointer-events: none;
+            text-shadow: 0 0 50px rgba(59,130,246,0.1);
         }
         
         * {
@@ -462,7 +478,7 @@ def load_professional_trading_design():
             background: transparent;
             color: white;
             position: relative;
-            z-index: 1;
+            z-index: 10;
         }
         
         /* 頂部橫幅 - 專業交易風格 */
@@ -475,6 +491,7 @@ def load_professional_trading_design():
             border: 1px solid rgba(59, 130, 246, 0.2);
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         .trading-banner::before {
@@ -529,7 +546,7 @@ def load_professional_trading_design():
             51%, 100% { opacity: 0.3; }
         }
         
-        /* 交易面板標題 - 增強版 */
+        /* 交易面板標題 */
         .trading-section {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
@@ -541,6 +558,7 @@ def load_professional_trading_design():
             border: 1px solid rgba(148, 163, 184, 0.2);
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         .trading-section::before {
@@ -577,6 +595,7 @@ def load_professional_trading_design():
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         div[data-testid="metric-container"]:hover {
@@ -616,13 +635,7 @@ def load_professional_trading_design():
             font-size: 0.9rem !important;
         }
         
-        /* 漲跌箭頭顏色 */
-        div[data-testid="metric-container"] div[data-testid="stMetricDelta"] svg {
-            width: 12px !important;
-            height: 12px !important;
-        }
-        
-        /* 股票卡片 - 專業交易風格 */
+        /* 股票卡片 */
         .stock-card {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             border-radius: 16px;
@@ -633,6 +646,7 @@ def load_professional_trading_design():
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         .stock-card:hover {
@@ -651,7 +665,7 @@ def load_professional_trading_design():
             background: linear-gradient(180deg, #3b82f6, #1d4ed8);
         }
         
-        /* 股票信息樣式 */
+        /* 其餘樣式保持不變 */
         .stock-rank {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
@@ -683,36 +697,6 @@ def load_professional_trading_design():
             margin-bottom: 0.5rem;
         }
         
-        .stock-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .stock-metric {
-            text-align: center;
-            padding: 0.8rem;
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 8px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-        }
-        
-        .stock-metric-label {
-            color: #64748b;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-        }
-        
-        .stock-metric-value {
-            color: #e2e8f0;
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
-        
-        /* 漲跌顏色 */
         .positive {
             color: #22c55e !important;
         }
@@ -729,6 +713,8 @@ def load_professional_trading_design():
             padding: 1rem;
             margin: 1rem 0;
             border: 1px solid rgba(148, 163, 184, 0.2);
+            z-index: 10;
+            position: relative;
         }
         
         /* 時間戳樣式 */
@@ -753,8 +739,12 @@ def load_professional_trading_design():
             }
             
             .stApp::before {
-                width: 200px;
-                height: 200px;
+                font-size: 3rem;
+            }
+            
+            .stApp::after {
+                width: 250px;
+                height: 250px;
             }
         }
         
@@ -769,6 +759,10 @@ def load_professional_trading_design():
             
             div[data-testid="metric-container"] > div > div {
                 font-size: 1.5rem !important;
+            }
+            
+            .stApp::before {
+                font-size: 2rem;
             }
         }
     </style>
@@ -833,7 +827,7 @@ def create_enhanced_trading_section(title, data, t, asset_type="default"):
         st.warning(f"{t['loading']} {title}")
         return
     
-    # 根據資產類型決定列數
+    # 根據數據數量決定列數
     if len(data) <= 3:
         cols = st.columns(len(data))
     else:
@@ -844,15 +838,12 @@ def create_enhanced_trading_section(title, data, t, asset_type="default"):
             with cols[i]:
                 # 根據資產類型決定顯示格式
                 if asset_type == "crypto" and info.get('market_cap', 0) > 0:
-                    # 加密貨幣顯示24小時高低點和市值
                     market_cap_str = f"${info['market_cap']/1e9:.1f}B" if info['market_cap'] > 1e9 else f"${info['market_cap']/1e6:.1f}M"
                     delta_str = f"{info['change']:+.2f} ({info['change_pct']:+.2f}%)"
                 elif asset_type == "forex":
-                    # 外匯顯示更多小數位
                     delta_str = f"{info['change']:+.4f} ({info['change_pct']:+.2f}%)"
                     price_str = f"{info['price']:.4f}"
                 else:
-                    # 期貨和其他資產
                     delta_str = f"{info['change']:+.2f} ({info['change_pct']:+.2f}%)"
                     price_str = f"{info['price']:,.2f}"
                 
@@ -896,11 +887,10 @@ def create_enhanced_hot_stocks_section(stocks_data, t):
         st.warning(f"{t['loading']} {t['hot_stocks']}")
         return
     
-    for i, stock in enumerate(stocks_data[:10], 1):  # 顯示前10名
+    for i, stock in enumerate(stocks_data[:10], 1):
         with st.container():
             st.markdown('<div class="stock-card">', unsafe_allow_html=True)
             
-            # 排名標籤
             st.markdown(f'<div class="stock-rank">#{i}</div>', unsafe_allow_html=True)
             
             col1, col2, col3 = st.columns([2, 1, 1])
@@ -917,21 +907,11 @@ def create_enhanced_hot_stocks_section(stocks_data, t):
             
             with col3:
                 volume_str = f"{stock['volume']/1e6:.1f}M" if stock['volume'] > 1e6 else f"{stock['volume']/1e3:.0f}K"
-                st.markdown(f"""
-                <div class="stock-metric">
-                    <div class="stock-metric-label">{t['volume']}</div>
-                    <div class="stock-metric-value">{volume_str}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                st.markdown(f"**{t['volume']}:** {volume_str}")
                 
                 if stock.get('market_cap', 0) > 0:
                     mcap_str = f"${stock['market_cap']/1e9:.1f}B" if stock['market_cap'] > 1e9 else f"${stock['market_cap']/1e6:.1f}M"
-                    st.markdown(f"""
-                    <div class="stock-metric">
-                        <div class="stock-metric-label">{t['market_cap']}</div>
-                        <div class="stock-metric-value">{mcap_str}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown(f"**{t['market_cap']}:** {mcap_str}")
             
             st.markdown('</div>', unsafe_allow_html=True)
 
@@ -961,8 +941,8 @@ def language_selector(t):
 
 # ====== 主應用程式 ======
 def main():
-    # 載入專業交易平台設計
-    load_professional_trading_design()
+    # 載入修復的專業交易平台設計
+    load_fixed_professional_design()
     
     # 獲取當前語言設定
     lang = st.session_state.language
@@ -994,17 +974,12 @@ def main():
     st.markdown(f'<div class="timestamp">{t["last_update"]}: {st.session_state.last_refresh.strftime("%H:%M:%S")} | 刷新次數: {st.session_state.refresh_counter}</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # 自動刷新邏輯
-    if st.session_state.auto_refresh:
-        time.sleep(30)  # 30秒自動刷新
-        st.rerun()
-    
     # 數據載入狀態
     with st.spinner(f"{t['loading']} {t['real_time_data']}..."):
         
         # 並行載入所有數據
         with ThreadPoolExecutor(max_workers=4) as executor:
-            futures_future = executor.submit(get_enhanced_futures_data)
+            futures_future = executor.submit(get_fixed_futures_data)  # 使用修復的期貨數據函數
             crypto_future = executor.submit(get_enhanced_crypto_data)
             other_future = executor.submit(get_enhanced_forex_commodities_bonds)
             stocks_future = executor.submit(get_enhanced_hot_stocks)
@@ -1015,7 +990,7 @@ def main():
             other_data = other_future.result()
             stocks_data = stocks_future.result()
     
-    # 期貨指數區域
+    # 期貨指數區域 - 使用修復的數據
     create_enhanced_trading_section(t['futures_indices'], futures_data, t, "futures")
     
     # 加密貨幣區域
@@ -1047,7 +1022,7 @@ def main():
         </p>
         <p style="margin-bottom: 1rem; color: #94a3b8;">© 2025 TENKI Professional Trading Platform</p>
         <p style="font-size: 0.8rem; opacity: 0.8;">
-            即時數據來源: Yahoo Finance | 僅供投資參考，投資有風險
+            數據來源: Yahoo Finance | 期貨採用主力合約 | 僅供投資參考
         </p>
     </div>
     </div>
