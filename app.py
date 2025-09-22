@@ -202,95 +202,6 @@ TEXTS = {
         "about_us": "About Us",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service"
-    },
-    "jp": {
-        "app_name": "TENKI",
-        "app_subtitle": "転機",
-        "app_description": "プロフェッショナル投資決定支援プラットフォーム",
-        "slogan": "洞察を機会に変える",
-        "tagline": "市場インテリジェンスを投資成功に変換",
-        "hero_title": "重要な転換点で",
-        "hero_subtitle": "賢明な決定を",
-        "hero_cta": "旅を始める",
-        "login": "ログイン",
-        "register": "新規登録",
-        "get_started": "始める",
-        "learn_more": "詳しく見る",
-        "email": "メールアドレス",
-        "password": "パスワード",
-        "forgot_password": "パスワードを忘れた？",
-        "google_login": "Googleでログイン",
-        "apple_login": "Appleでログイン",
-        "dashboard": "ダッシュボード",
-        "virtual_portfolio": "バーチャル米国株ポートフォリオ",
-        "my_subscription": "サブスクリプション",
-        "settings": "設定",
-        "auto_navigation": "自動ナビゲーションモード",
-        "solution_generator": "ソリューション生成器",
-        "market_overview": "マーケット概要",
-        "expert_insights": "専門家の洞察",
-        "recommended_targets": "推奨銘柄",
-        "action_plan": "アクションプラン",
-        "add_to_watchlist": "ウォッチリストに追加",
-        "virtual_trading": "仮想取引",
-        "portfolio_performance": "ポートフォリオパフォーマンス",
-        "expert_portfolio": "エキスパートポートフォリオ",
-        "real_time_quotes": "リアルタイム株価",
-        "subscription_status": "サブスクリプション状況",
-        "next_billing": "次回請求",
-        "payment_method": "支払い方法",
-        "cancel_subscription": "サブスクリプション解約",
-        "monthly_plan": "月額$22",
-        "risk_preference": "リスク選好",
-        "investment_goal": "投資目標",
-        "conservative": "保守的",
-        "moderate": "中程度",
-        "aggressive": "積極的",
-        "growth": "成長志向",
-        "income": "収益志向",
-        "balanced": "バランス型",
-        "us_stocks": "米国株",
-        "bonds": "債券",
-        "futures": "先物",
-        "funds": "ファンド",
-        "disclaimer": "免責事項：提供される情報は参考目的のみで、投資助言ではありません。投資にはリスクが伴います。",
-        "logout": "ログアウト",
-        "welcome": "おかえりなさい",
-        "today_pnl": "本日の損益",
-        "total_return": "総収益",
-        "win_rate": "勝率",
-        "loading": "読み込み中...",
-        "generate_solution": "ソリューション生成",
-        "market_opportunity": "市場機会",
-        "risk_analysis": "リスク分析",
-        "entry_point": "エントリーポイント",
-        "exit_point": "エグジットポイント",
-        "expected_return": "期待収益",
-        "allocation_ratio": "配分比率",
-        "monitoring_indicators": "監視指標",
-        "buy": "買い",
-        "sell": "売り",
-        "quantity": "数量",
-        "current_price": "現在価格",
-        "pnl": "損益",
-        "change": "変化",
-        "volume": "出来高",
-        "features_title": "コア機能",
-        "ai_insights": "AI駆動の洞察",
-        "ai_insights_desc": "人工知能を活用して市場トレンドを分析し、パーソナライズされた投資推奨を提供",
-        "portfolio_management": "ポートフォリオ管理",
-        "portfolio_management_desc": "投資戦略をリスクフリーで検証するプロフェッショナルな仮想取引システム",
-        "real_time_data": "リアルタイム市場データ",
-        "real_time_data_desc": "グローバル金融市場データの同期でより良い投資タイミングを",
-        "risk_control": "インテリジェントリスク制御",
-        "risk_control_desc": "多層リスク評価で投資を保護",
-        "pricing_title": "サブスクリプションプラン",
-        "free_plan": "無料トライアル",
-        "premium_plan": "プレミアム",
-        "contact_us": "お問い合わせ",
-        "about_us": "会社概要",
-        "privacy_policy": "プライバシーポリシー",
-        "terms_of_service": "利用規約"
     }
 }
 
@@ -549,11 +460,9 @@ def generate_investment_solution(risk_pref, investment_goal, market_data):
         # 預設解決方案
         return solutions_db[('moderate', 'balanced')]
 
-# ====== 現代化設計系統 - Rocket.new 風格 ======
-def load_modern_tenki_design():
-    """載入現代化TENKI設計系統 - 基於現代web設計趨勢"""
-    
-    logo_config = load_optimal_logo()
+# ====== 修正後的設計系統 ======
+def load_fixed_tenki_design():
+    """載入修正後的TENKI設計系統"""
     
     st.markdown("""
     <style>
@@ -563,71 +472,15 @@ def load_modern_tenki_design():
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
         
-        /* 現代色彩系統 */
-        :root {
-            /* 主色調 - 深色主題 */
-            --bg-primary: #0f0f0f;
-            --bg-secondary: #1a1a1a;
-            --bg-tertiary: #2d2d2d;
-            --bg-elevated: #1f1f1f;
-            
-            /* 文字顏色 */
-            --text-primary: #ffffff;
-            --text-secondary: #a8a8a8;
-            --text-tertiary: #6b6b6b;
-            --text-muted: #404040;
-            
-            /* 品牌色彩 */
-            --brand-primary: #00d4aa;
-            --brand-secondary: #007aff;
-            --brand-tertiary: #6c5ce7;
-            
-            /* 功能色彩 */
-            --success: #00c851;
-            --error: #ff3838;
-            --warning: #ffb000;
-            --info: #33b5e5;
-            
-            /* 現代漸變 */
-            --gradient-brand: linear-gradient(135deg, #00d4aa 0%, #007aff 50%, #6c5ce7 100%);
-            --gradient-dark: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-            --gradient-card: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            
-            /* 陰影系統 */
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
-            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
-            --shadow-brand: 0 8px 32px rgba(0, 212, 170, 0.2);
-            
-            /* 間距系統 */
-            --space-xs: 0.25rem;
-            --space-sm: 0.5rem;
-            --space-md: 1rem;
-            --space-lg: 1.5rem;
-            --space-xl: 2rem;
-            --space-2xl: 3rem;
-            --space-3xl: 4rem;
-            --space-4xl: 6rem;
-            
-            /* 邊框半徑 */
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --radius-2xl: 32px;
-            --radius-full: 9999px;
-        }
-        
-        /* 全局重置和基礎樣式 */
+        /* 基礎設定 */
         .main .block-container {
             padding: 0 !important;
             margin: 0 !important;
             max-width: 100% !important;
-            background: var(--bg-primary);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--text-primary);
-            line-height: 1.6;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
         }
         
         #MainMenu, footer, header, .stDeployButton, .stDecoration {
@@ -636,114 +489,69 @@ def load_modern_tenki_design():
         
         .stApp {
             margin-top: -100px !important;
-            background: var(--bg-primary);
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
             min-height: 100vh;
-            position: relative;
-        }
-        
-        /* 現代背景效果 */
-        .stApp::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 212, 170, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 122, 255, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, rgba(108, 92, 231, 0.02) 0%, transparent 50%);
-            z-index: 0;
-            pointer-events: none;
         }
         
         /* 主容器 */
         .main-container {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        /* ===== Landing Page 設計 ===== */
-        .landing-hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        /* 品牌展示 */
+        .tenki-hero {
             text-align: center;
-            padding: var(--space-4xl) var(--space-xl);
-            background: var(--gradient-dark);
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border-radius: 24px;
+            margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
         }
         
-        .landing-hero::before {
+        .tenki-hero::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 800px;
-            height: 800px;
-            background: var(--gradient-brand);
-            border-radius: 50%;
-            opacity: 0.1;
-            transform: translate(-50%, -50%);
-            filter: blur(100px);
-            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
+            animation: glow-pulse 3s ease-in-out infinite;
         }
         
-        /* Logo區域 */
-        .hero-logo {
-            margin-bottom: var(--space-2xl);
-            position: relative;
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
         
-        .logo-container {
+        .tenki-logo {
             width: 120px;
             height: 120px;
-            margin: 0 auto var(--space-lg);
-            position: relative;
-            border-radius: var(--radius-full);
-            background: var(--gradient-brand);
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: var(--shadow-brand);
-            animation: logo-pulse 3s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            position: relative;
         }
         
-        .logo-container::before {
+        .tenki-logo::before {
             content: '';
             position: absolute;
             top: -4px;
             left: -4px;
             right: -4px;
             bottom: -4px;
-            background: var(--gradient-brand);
-            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
             opacity: 0.5;
             animation: logo-spin 8s linear infinite;
             z-index: -1;
-        }
-        
-        .logo-image {
-            width: 80px;
-            height: 80px;
-            border-radius: var(--radius-full);
-            object-fit: cover;
-        }
-        
-        .logo-fallback {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-        
-        @keyframes logo-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
         
         @keyframes logo-spin {
@@ -751,228 +559,97 @@ def load_modern_tenki_design():
             100% { transform: rotate(360deg); }
         }
         
-        /* 標題和副標題 */
-        .hero-title {
+        .tenki-logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .tenki-logo-fallback {
             font-family: 'Outfit', sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: 3rem;
             font-weight: 800;
-            line-height: 0.9;
-            margin-bottom: var(--space-sm);
-            background: var(--gradient-brand);
+            color: white;
+        }
+        
+        .tenki-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #8b5cf6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        .hero-subtitle-jp {
+        .tenki-subtitle {
             font-family: 'Noto Sans JP', sans-serif;
             font-size: 1.5rem;
-            font-weight: 300;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
+            color: #94a3b8;
+            margin-bottom: 1rem;
         }
         
-        .hero-tagline {
+        .tenki-slogan {
             font-size: 1.25rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-sm);
-            font-weight: 400;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            font-style: italic;
         }
         
-        .hero-description {
-            font-size: 1.125rem;
-            color: var(--text-tertiary);
-            margin-bottom: var(--space-3xl);
+        .tenki-description {
+            font-size: 1rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 2rem;
             max-width: 600px;
-            line-height: 1.7;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        /* CTA按鈕區域 */
-        .hero-cta {
-            display: flex;
-            gap: var(--space-lg);
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: var(--space-3xl);
-        }
-        
-        .cta-primary {
-            padding: var(--space-lg) var(--space-2xl);
-            background: var(--gradient-brand);
-            border: none;
-            border-radius: var(--radius-full);
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-brand);
-        }
-        
-        .cta-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0, 212, 170, 0.3);
-        }
-        
-        .cta-secondary {
-            padding: var(--space-lg) var(--space-2xl);
-            background: transparent;
-            border: 2px solid var(--text-tertiary);
-            border-radius: var(--radius-full);
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .cta-secondary:hover {
-            border-color: var(--brand-primary);
-            color: var(--brand-primary);
-            transform: translateY(-2px);
-        }
-        
-        /* 語言切換器 */
-        .language-switcher {
-            display: flex;
-            gap: var(--space-sm);
-            margin-top: var(--space-xl);
-        }
-        
-        .lang-btn {
-            padding: var(--space-sm) var(--space-md);
-            background: var(--bg-secondary);
-            border: 1px solid var(--bg-tertiary);
-            border-radius: var(--radius-lg);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .lang-btn:hover, .lang-btn.active {
-            background: var(--brand-primary);
-            border-color: var(--brand-primary);
-            color: var(--text-primary);
-        }
-        
-        /* ===== 導航系統 ===== */
-        .app-nav {
-            position: sticky;
-            top: 0;
-            background: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--bg-tertiary);
-            padding: var(--space-md) var(--space-xl);
-            z-index: 100;
-        }
-        
+        /* 導航系統 */
         .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
-        }
-        
-        .nav-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            background: var(--gradient-brand);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1.25rem;
-        }
-        
-        .nav-title {
+            gap: 1rem;
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-primary);
+            font-size: 1.25rem;
+            color: #ffffff;
         }
         
         .nav-links {
             display: flex;
-            gap: var(--space-sm);
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
         
-        .nav-link {
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-        
-        .nav-user {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-        
-        /* ===== 登入頁面設計 ===== */
-        .login-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-xl);
-        }
-        
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            background: var(--gradient-card);
-            border: 1px solid var(--bg-tertiary);
-            border-radius: var(--radius-2xl);
-            padding: var(--space-3xl) var(--space-2xl);
-            box-shadow: var(--shadow-xl);
-        }
-        
-        .login-header {
-            text-align: center;
-            margin-bottom: var(--space-2xl);
-        }
-        
-        .login-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-sm);
-            color: var(--text-primary);
-        }
-        
-        .login-subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        
-        /* ===== 現代卡片設計 ===== */
+        /* 現代卡片設計 */
         .modern-card {
-            background: var(--gradient-card);
-            border: 1px solid var(--bg-tertiary);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin-bottom: 2rem;
         }
         
         .modern-card::before {
@@ -982,71 +659,71 @@ def load_modern_tenki_design():
             left: 0;
             right: 0;
             height: 3px;
-            background: var(--gradient-brand);
-            opacity: 0.8;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
         }
         
         .modern-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--brand-primary);
+            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+            border-color: rgba(59, 130, 246, 0.3);
         }
         
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: var(--space-lg);
+            margin-bottom: 1.5rem;
         }
         
         .card-title {
             font-family: 'Outfit', sans-serif;
             font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 700;
+            color: #ffffff;
         }
         
         .card-icon {
             width: 48px;
             height: 48px;
-            border-radius: var(--radius-lg);
-            background: var(--gradient-brand);
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
         }
         
-        /* ===== 指標卡片 ===== */
+        /* 指標卡片 */
         .metric-card {
-            background: var(--gradient-card);
-            border: 1px solid var(--bg-tertiary);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
         
         .metric-card:hover {
             transform: translateY(-2px);
-            border-color: var(--brand-primary);
+            border-color: rgba(59, 130, 246, 0.4);
         }
         
         .metric-value {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--space-sm);
+            color: #ffffff;
+            margin-bottom: 0.5rem;
         }
         
         .metric-label {
-            color: var(--text-secondary);
+            color: #94a3b8;
             font-size: 0.875rem;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: var(--space-xs);
+            margin-bottom: 0.5rem;
         }
         
         .metric-change {
@@ -1056,106 +733,105 @@ def load_modern_tenki_design():
         }
         
         .metric-positive {
-            color: var(--success);
+            color: #10b981;
         }
         
         .metric-negative {
-            color: var(--error);
+            color: #ef4444;
         }
         
-        /* ===== 解決方案卡片 ===== */
+        /* 解決方案卡片 */
         .solution-card {
-            background: var(--gradient-card);
-            border: 1px solid var(--bg-tertiary);
-            border-radius: var(--radius-2xl);
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-xl);
-            box-shadow: var(--shadow-lg);
-            position: relative;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
         }
         
         .solution-theme {
             font-family: 'Outfit', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--space-lg);
-            background: var(--gradient-brand);
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
         .solution-insight {
-            color: var(--text-secondary);
+            color: #cbd5e1;
             line-height: 1.7;
-            margin-bottom: var(--space-xl);
+            margin-bottom: 2rem;
             font-size: 1rem;
         }
         
         .target-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-xl);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .target-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--bg-tertiary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
             transition: all 0.2s ease;
         }
         
         .target-card:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--brand-primary);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(59, 130, 246, 0.3);
         }
         
         .target-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: var(--space-md);
+            margin-bottom: 1rem;
         }
         
         .target-symbol {
             font-family: 'JetBrains Mono', monospace;
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #ffffff;
         }
         
         .target-type {
             font-size: 0.75rem;
-            color: var(--brand-secondary);
+            color: #8b5cf6;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            background: rgba(0, 122, 255, 0.1);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-sm);
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
         }
         
         .target-allocation {
             font-family: 'JetBrains Mono', monospace;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--brand-primary);
+            color: #10b981;
         }
         
         .target-analysis {
-            color: var(--text-secondary);
+            color: #94a3b8;
             font-size: 0.9rem;
             line-height: 1.6;
-            margin-bottom: var(--space-md);
+            margin-bottom: 1rem;
         }
         
         .target-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: var(--space-md);
+            gap: 1rem;
         }
         
         .detail-item {
@@ -1164,197 +840,177 @@ def load_modern_tenki_design():
         
         .detail-label {
             font-size: 0.75rem;
-            color: var(--text-tertiary);
+            color: #6b7280;
             font-weight: 500;
-            margin-bottom: var(--space-xs);
+            margin-bottom: 0.25rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         
         .detail-value {
             font-size: 0.9rem;
-            color: var(--text-primary);
+            color: #ffffff;
             font-weight: 600;
         }
         
-        /* ===== 響應式設計 ===== */
+        /* 登入表單 */
+        .login-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        /* 響應式設計 */
         @media (max-width: 768px) {
-            .landing-hero {
-                padding: var(--space-2xl) var(--space-lg);
+            .main-container {
+                padding: 1rem;
             }
             
-            .hero-title {
-                font-size: clamp(2rem, 10vw, 3rem);
+            .tenki-hero {
+                padding: 2rem 1rem;
             }
             
-            .hero-cta {
-                flex-direction: column;
-                align-items: center;
-                gap: var(--space-md);
-            }
-            
-            .cta-primary, .cta-secondary {
-                width: 100%;
-                max-width: 280px;
+            .tenki-title {
+                font-size: 2.5rem;
             }
             
             .nav-container {
-                padding: 0 var(--space-md);
+                padding: 1rem 0.75rem;
             }
             
             .nav-links {
-                display: none;
-            }
-            
-            .login-card {
-                margin: var(--space-lg);
-                padding: var(--space-xl);
+                width: 100%;
+                justify-content: center;
             }
             
             .target-grid {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        @media (max-width: 480px) {
-            .hero-description {
-                font-size: 1rem;
-            }
-            
-            .solution-card {
-                padding: var(--space-lg);
-            }
             
             .modern-card {
-                padding: var(--space-lg);
+                padding: 1.5rem;
+            }
+            
+            .login-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
             }
         }
         
-        /* ===== Streamlit 組件優化 ===== */
+        /* Streamlit 組件優化 */
         .stButton > button {
-            background: var(--gradient-brand) !important;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
             border: none !important;
-            border-radius: var(--radius-lg) !important;
-            color: var(--text-primary) !important;
+            border-radius: 12px !important;
+            color: white !important;
             font-weight: 600 !important;
-            padding: var(--space-md) var(--space-xl) !important;
+            padding: 0.75rem 1.5rem !important;
             transition: all 0.3s ease !important;
             font-family: 'Inter', sans-serif !important;
         }
         
         .stButton > button:hover {
             transform: translateY(-2px) !important;
-            box-shadow: var(--shadow-brand) !important;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3) !important;
         }
         
         .stSelectbox > div > div {
-            background: var(--bg-secondary) !important;
-            border: 1px solid var(--bg-tertiary) !important;
-            border-radius: var(--radius-md) !important;
-            color: var(--text-primary) !important;
+            background: rgba(30, 41, 59, 0.8) !important;
+            border: 1px solid rgba(148, 163, 184, 0.2) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
         }
         
         .stTextInput > div > div > input {
-            background: var(--bg-secondary) !important;
-            border: 1px solid var(--bg-tertiary) !important;
-            border-radius: var(--radius-md) !important;
-            color: var(--text-primary) !important;
-            padding: var(--space-md) !important;
+            background: rgba(30, 41, 59, 0.8) !important;
+            border: 1px solid rgba(148, 163, 184, 0.2) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            padding: 0.75rem !important;
         }
         
         .stTextInput > div > div > input:focus {
-            border-color: var(--brand-primary) !important;
-            box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.2) !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
         }
         
-        /* ===== 滾動條優化 ===== */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--gradient-brand);
-            border-radius: var(--radius-sm);
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--brand-primary);
-        }
-        
-        /* ===== 免責聲明 ===== */
+        /* 免責聲明 */
         .disclaimer {
-            background: rgba(255, 56, 56, 0.1);
-            border: 1px solid rgba(255, 56, 56, 0.2);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
             color: #fca5a5;
             font-size: 0.9rem;
             line-height: 1.6;
-            margin: var(--space-xl) 0;
+            margin: 2rem 0;
         }
         
         .disclaimer-icon {
             display: inline-block;
-            margin-right: var(--space-sm);
+            margin-right: 0.5rem;
             font-size: 1.1rem;
         }
     </style>
     """, unsafe_allow_html=True)
 
-# ====== Landing Page 設計 ======
+# ====== Landing Page ======
 def show_landing_page():
-    """顯示現代化Landing Page"""
+    """顯示Landing Page"""
     lang = st.session_state.language
     t = TEXTS[lang]
     
     # Hero Section
     logo_config = load_optimal_logo()
     
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    # 品牌展示區域
     if logo_config:
-        logo_element = f'<img src="{logo_config["data"]}" alt="TENKI Logo" class="logo-image" />'
+        logo_element = f'<img src="{logo_config["data"]}" alt="TENKI Logo" />'
     else:
-        logo_element = '<div class="logo-fallback">T</div>'
+        logo_element = '<div class="tenki-logo-fallback">T</div>'
     
     st.markdown(f'''
-    <div class="landing-hero">
-        <div class="hero-logo">
-            <div class="logo-container">
-                {logo_element}
-            </div>
-            <div class="hero-title">TENKI</div>
-            <div class="hero-subtitle-jp">{t['app_subtitle']}</div>
+    <div class="tenki-hero">
+        <div class="tenki-logo">
+            {logo_element}
         </div>
-        
-        <div class="hero-tagline">{t['slogan']}</div>
-        <div class="hero-description">
-            {t['app_description']}・在關鍵轉折點做出理想決策・實現資產增值
-        </div>
-        
-        <div class="hero-cta">
-            <button class="cta-primary" onclick="window.location.reload()">
-                🚀 {t['get_started']}
-            </button>
-            <button class="cta-secondary">
-                📖 {t['learn_more']}
-            </button>
-        </div>
-        
-        <div class="language-switcher">
-            <div class="lang-btn {'active' if lang == 'zh' else ''}" onclick="setLanguage('zh')">🇹🇼 中文</div>
-            <div class="lang-btn {'active' if lang == 'en' else ''}" onclick="setLanguage('en')">🇺🇸 English</div>
-            <div class="lang-btn {'active' if lang == 'jp' else ''}" onclick="setLanguage('jp')">🇯🇵 日本語</div>
+        <h1 class="tenki-title">TENKI</h1>
+        <p class="tenki-subtitle">{t['app_subtitle']}</p>
+        <p class="tenki-slogan">{t['slogan']}</p>
+        <div class="tenki-description">
+            {t['app_description']} • 在關鍵轉折點做出理想決策 • 實現資產增值
         </div>
     </div>
     ''', unsafe_allow_html=True)
     
-    # 語言切換功能
+    # 語言切換和CTA按鈕
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
+        # 語言切換
         lang_col1, lang_col2, lang_col3 = st.columns(3)
         
         with lang_col1:
@@ -1369,73 +1025,51 @@ def show_landing_page():
                 st.session_state.language = 'en'
                 st.rerun()
         
-        with lang_col3:
-            if st.button("🇯🇵 日本語", use_container_width=True,
-                        type="primary" if lang == 'jp' else "secondary"):
-                st.session_state.language = 'jp'
-                st.rerun()
+        st.markdown("---")
+        
+        # CTA按鈕
+        if st.button(f"🚀 {t['get_started']}", use_container_width=True, type="primary"):
+            st.session_state.current_page = 'login'
+            st.rerun()
+        
+        if st.button(f"📖 {t['learn_more']}", use_container_width=True):
+            st.info("💡 更多功能介紹即將推出...")
     
     # 核心功能介紹
     st.markdown(f'''
-    <div style="padding: {st.session_state.get('space_4xl', '6rem')} {st.session_state.get('space_xl', '2rem')}; background: var(--bg-secondary);">
-        <h2 style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 3rem; color: var(--text-primary);">
-            {t['features_title']}
-        </h2>
+    <div class="modern-card">
+        <div class="card-header">
+            <h2 class="card-title">{t['features_title']}</h2>
+            <div class="card-icon">⭐</div>
+        </div>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
-            <div class="modern-card">
-                <div class="card-header">
-                    <h3 class="card-title">{t['ai_insights']}</h3>
-                    <div class="card-icon">🤖</div>
-                </div>
-                <p style="color: var(--text-secondary); line-height: 1.6;">{t['ai_insights_desc']}</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🤖</div>
+                <h3 style="color: #ffffff; margin-bottom: 0.5rem;">{t['ai_insights']}</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">{t['ai_insights_desc']}</p>
             </div>
             
-            <div class="modern-card">
-                <div class="card-header">
-                    <h3 class="card-title">{t['portfolio_management']}</h3>
-                    <div class="card-icon">💼</div>
-                </div>
-                <p style="color: var(--text-secondary); line-height: 1.6;">{t['portfolio_management_desc']}</p>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">💼</div>
+                <h3 style="color: #ffffff; margin-bottom: 0.5rem;">{t['portfolio_management']}</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">{t['portfolio_management_desc']}</p>
             </div>
             
-            <div class="modern-card">
-                <div class="card-header">
-                    <h3 class="card-title">{t['real_time_data']}</h3>
-                    <div class="card-icon">📊</div>
-                </div>
-                <p style="color: var(--text-secondary); line-height: 1.6;">{t['real_time_data_desc']}</p>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+                <h3 style="color: #ffffff; margin-bottom: 0.5rem;">{t['real_time_data']}</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">{t['real_time_data_desc']}</p>
             </div>
             
-            <div class="modern-card">
-                <div class="card-header">
-                    <h3 class="card-title">{t['risk_control']}</h3>
-                    <div class="card-icon">🛡️</div>
-                </div>
-                <p style="color: var(--text-secondary); line-height: 1.6;">{t['risk_control_desc']}</p>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🛡️</div>
+                <h3 style="color: #ffffff; margin-bottom: 0.5rem;">{t['risk_control']}</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">{t['risk_control_desc']}</p>
             </div>
         </div>
     </div>
     ''', unsafe_allow_html=True)
-    
-    # CTA Section
-    st.markdown(f'''
-    <div style="padding: {st.session_state.get('space_4xl', '6rem')} {st.session_state.get('space_xl', '2rem')}; text-align: center; background: var(--bg-primary);">
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">
-            準備開始您的投資旅程？
-        </h2>
-        <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
-            立即註冊，獲得專業投資決策支援
-        </p>
-    </div>
-    ''', unsafe_allow_html=True)
-    
-    # 登入區域
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        if st.button(f"🚀 {t['get_started']}", use_container_width=True, type="primary"):
-            st.session_state.current_page = 'login'
-            st.rerun()
     
     # 免責聲明
     st.markdown(f'''
@@ -1444,61 +1078,16 @@ def show_landing_page():
         {t['disclaimer']}
     </div>
     ''', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# ====== 繼承之前的功能組件 ======
-def create_modern_nav():
-    """創建現代化導航"""
+# ====== 登入頁面 ======
+def show_login_page():
+    """顯示登入頁面"""
     lang = st.session_state.language
     t = TEXTS[lang]
     
-    logo_config = load_optimal_logo()
-    
-    if st.session_state.user_logged_in:
-        # 導航選項
-        nav_items = [
-            ('dashboard', '🏠 ' + t['dashboard']),
-            ('auto_navigation', '🧭 ' + t['auto_navigation']),
-            ('solution_generator', '⚡ ' + t['solution_generator']),
-            ('virtual_portfolio', '💼 ' + t['virtual_portfolio']),
-            ('subscription', '💳 ' + t['my_subscription']),
-            ('settings', '⚙️ ' + t['settings'])
-        ]
-        
-        st.markdown('<div class="app-nav">', unsafe_allow_html=True)
-        
-        # 頂部導航
-        cols = st.columns([2] + [1] * len(nav_items) + [1])
-        
-        # 品牌Logo區域
-        with cols[0]:
-            if logo_config:
-                st.image(logo_config['data'], width=40)
-            st.markdown("**TENKI**")
-        
-        # 導航連結
-        for i, (page_key, page_name) in enumerate(nav_items, 1):
-            with cols[i]:
-                if st.button(page_name, use_container_width=True,
-                           type="primary" if st.session_state.current_page == page_key else "secondary"):
-                    st.session_state.current_page = page_key
-                    st.rerun()
-        
-        # 用戶區域
-        with cols[-1]:
-            if st.button(f"👤 {t['logout']}"):
-                st.session_state.user_logged_in = False
-                st.session_state.current_page = 'landing'
-                st.rerun()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-
-def show_modern_login():
-    """現代化登入頁面"""
-    lang = st.session_state.language
-    t = TEXTS[lang]
-    
-    st.markdown('<div class="login-container">', unsafe_allow_html=True)
-    st.markdown('<div class="login-card">', unsafe_allow_html=True)
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
     
     # 品牌區域
     logo_config = load_optimal_logo()
@@ -1506,23 +1095,18 @@ def show_modern_login():
     if logo_config:
         st.markdown(f'''
         <div style="text-align: center; margin-bottom: 2rem;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 1rem; border-radius: 50%; background: var(--gradient-brand); display: flex; align-items: center; justify-content: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 1rem; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center;">
                 <img src="{logo_config['data']}" alt="TENKI Logo" style="width: 60px; height: 60px; border-radius: 50%;" />
             </div>
-            <h1 style="font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">TENKI</h1>
-            <p style="color: var(--text-secondary);">{t['tagline']}</p>
-        </div>
-        ''', unsafe_allow_html=True)
-    else:
-        st.markdown(f'''
-        <div class="login-header">
-            <div class="login-title">TENKI</div>
-            <div class="login-subtitle">{t['tagline']}</div>
+            <h1 style="font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem;">TENKI</h1>
+            <p style="color: #94a3b8;">{t['tagline']}</p>
         </div>
         ''', unsafe_allow_html=True)
     
+    st.markdown('<div class="login-container">', unsafe_allow_html=True)
+    
     # 登入表單
-    with st.form("modern_login_form"):
+    with st.form("login_form"):
         email = st.text_input(t['email'], placeholder="your@email.com")
         password = st.text_input(t['password'], type="password", placeholder="••••••••")
         
@@ -1543,7 +1127,7 @@ def show_modern_login():
             else:
                 st.error("請填寫所有欄位")
     
-    st.markdown(f'<p style="text-align: center; margin: 1rem 0;"><a href="#" style="color: var(--brand-primary);">{t["forgot_password"]}</a></p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="text-align: center; margin: 1rem 0;"><a href="#" style="color: #3b82f6;">{t["forgot_password"]}</a></p>', unsafe_allow_html=True)
     
     # 社群登入
     st.markdown("**或使用以下方式登入**")
@@ -1569,60 +1153,65 @@ def show_modern_login():
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ====== 重用之前的所有功能組件 ======
-# (這裡將之前實現的所有功能都繼承過來，包括dashboard, auto_navigation, solution_generator等)
-
-# ====== 主應用程式 ======
-def main():
-    """TENKI現代化主應用程式"""
+# ====== 導航系統 ======
+def create_navigation():
+    """創建導航系統"""
+    lang = st.session_state.language
+    t = TEXTS[lang]
     
-    # 載入現代設計系統
-    load_modern_tenki_design()
-    
-    # 路由系統
-    if st.session_state.current_page == 'landing':
-        show_landing_page()
-    elif st.session_state.current_page == 'login':
-        show_modern_login()
-    elif st.session_state.user_logged_in:
-        # 顯示導航
-        create_modern_nav()
-        
-        # 根據當前頁面顯示相應內容
-        if st.session_state.current_page == 'dashboard':
-            show_dashboard()
-        elif st.session_state.current_page == 'auto_navigation':
-            show_auto_navigation()
-        elif st.session_state.current_page == 'solution_generator':
-            show_solution_generator()
-        elif st.session_state.current_page == 'virtual_portfolio':
-            show_virtual_portfolio()
-        elif st.session_state.current_page == 'subscription':
-            show_subscription()
-        elif st.session_state.current_page == 'settings':
-            show_settings()
-        else:
-            show_dashboard()
-    else:
-        # 未登入用戶預設返回landing page
-        st.session_state.current_page = 'landing'
-        show_landing_page()
-    
-    # 頁面底部免責聲明
     if st.session_state.user_logged_in:
-        lang = st.session_state.language
-        t = TEXTS[lang]
+        st.markdown('<div class="nav-container">', unsafe_allow_html=True)
+        
+        # 品牌區域
+        logo_config = load_optimal_logo()
+        if logo_config:
+            brand_logo = f'<img src="{logo_config["data"]}" alt="TENKI" style="width: 32px; height: 32px; border-radius: 50%;" />'
+        else:
+            brand_logo = '<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: white;">T</div>'
         
         st.markdown(f'''
-        <div class="disclaimer">
-            <span class="disclaimer-icon">⚠️</span>
-            {t['disclaimer']}
+        <div class="nav-brand">
+            {brand_logo}
+            <span>TENKI</span>
         </div>
         ''', unsafe_allow_html=True)
+        
+        # 導航選項
+        nav_items = [
+            ('dashboard', '🏠 ' + t['dashboard']),
+            ('auto_navigation', '🧭 ' + t['auto_navigation']),
+            ('solution_generator', '⚡ ' + t['solution_generator']),
+            ('virtual_portfolio', '💼 ' + t['virtual_portfolio']),
+            ('subscription', '💳 ' + t['my_subscription']),
+            ('settings', '⚙️ ' + t['settings'])
+        ]
+        
+        cols = st.columns([2] + [1] * len(nav_items) + [1])
+        
+        # 空佔位
+        with cols[0]:
+            st.write("")
+        
+        # 導航連結
+        for i, (page_key, page_name) in enumerate(nav_items, 1):
+            with cols[i]:
+                if st.button(page_name, use_container_width=True,
+                           type="primary" if st.session_state.current_page == page_key else "secondary"):
+                    st.session_state.current_page = page_key
+                    st.rerun()
+        
+        # 登出
+        with cols[-1]:
+            if st.button(f"🚪 {t['logout']}"):
+                st.session_state.user_logged_in = False
+                st.session_state.current_page = 'landing'
+                st.rerun()
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# 繼承所有之前實現的函數
+# ====== 儀表板 ======
 def show_dashboard():
-    """顯示儀表板 - 使用現代設計"""
+    """顯示儀表板"""
     lang = st.session_state.language
     t = TEXTS[lang]
     
@@ -1630,11 +1219,11 @@ def show_dashboard():
     
     # 歡迎標題
     st.markdown(f'''
-    <div style="padding: var(--space-xl); text-align: center;">
-        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem;">
             {t['welcome']}, {st.session_state.user_email.split('@')[0]}! 🎉
         </h1>
-        <p style="color: var(--text-secondary); font-size: 1.125rem;">準備好開始您今天的投資之旅了嗎？</p>
+        <p style="color: #94a3b8; font-size: 1.125rem;">準備好開始您今天的投資之旅了嗎？</p>
     </div>
     ''', unsafe_allow_html=True)
     
@@ -1672,17 +1261,18 @@ def show_dashboard():
         st.markdown(f'''
         <div class="metric-card">
             <div class="metric-label">風險指標</div>
-            <div class="metric-value" style="color: var(--success);">低風險</div>
+            <div class="metric-value" style="color: #10b981;">低風險</div>
             <div class="metric-change">波動率: 12.3%</div>
         </div>
         ''', unsafe_allow_html=True)
     
     # 市場概況
     st.markdown(f'''
-    <div style="margin: var(--space-2xl) 0;">
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-lg);">
-            📊 {t['market_overview']}
-        </h2>
+    <div class="modern-card">
+        <div class="card-header">
+            <h2 class="card-title">📊 {t['market_overview']}</h2>
+            <div class="card-icon">📈</div>
+        </div>
     </div>
     ''', unsafe_allow_html=True)
     
@@ -1723,10 +1313,11 @@ def show_dashboard():
     
     # 快速操作區域
     st.markdown(f'''
-    <div style="margin: var(--space-2xl) 0;">
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-lg);">
-            ⚡ 快速操作
-        </h2>
+    <div class="modern-card">
+        <div class="card-header">
+            <h2 class="card-title">⚡ 快速操作</h2>
+            <div class="card-icon">🚀</div>
+        </div>
     </div>
     ''', unsafe_allow_html=True)
     
@@ -1749,8 +1340,652 @@ def show_dashboard():
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ... 繼承所有其他之前實現的函數 (show_auto_navigation, show_solution_generator, 等等)
-# 由於篇幅限制，這裡省略其他函數的重複實現，但實際上會包含所有功能
+# ====== 自動導航模式 ======
+def show_auto_navigation():
+    """顯示自動導航模式"""
+    lang = st.session_state.language
+    t = TEXTS[lang]
+    
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div class="modern-card">
+        <div class="card-header">
+            <h1 class="card-title">🧭 {t['auto_navigation']}</h1>
+            <div class="card-icon">🎯</div>
+        </div>
+        <p style="color: #94a3b8; margin-bottom: 2rem;">根據您的投資偏好和目標，為您提供個性化的投資建議</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # 用戶偏好設定
+    st.markdown("### 📊 投資偏好設定")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        risk_pref = st.selectbox(
+            t['risk_preference'],
+            options=['conservative', 'moderate', 'aggressive'],
+            format_func=lambda x: {'conservative': t['conservative'], 'moderate': t['moderate'], 'aggressive': t['aggressive']}[x],
+            index=['conservative', 'moderate', 'aggressive'].index(st.session_state.risk_preference)
+        )
+        st.session_state.risk_preference = risk_pref
+    
+    with col2:
+        invest_goal = st.selectbox(
+            t['investment_goal'],
+            options=['income', 'balanced', 'growth'],
+            format_func=lambda x: {'income': t['income'], 'balanced': t['balanced'], 'growth': t['growth']}[x],
+            index=['income', 'balanced', 'growth'].index(st.session_state.investment_goal)
+        )
+        st.session_state.investment_goal = invest_goal
+    
+    # 生成個性化建議
+    if st.button(f"🎯 {t['generate_solution']}", use_container_width=True, type="primary"):
+        with st.spinner(f"{t['loading']}"):
+            market_data = get_market_data()
+            solution = generate_investment_solution(risk_pref, invest_goal, market_data)
+            st.session_state.generated_solutions = [solution]
+        
+        st.success("✅ 已生成個性化投資解決方案！")
+        time.sleep(1)
+        st.session_state.current_page = 'solution_generator'
+        st.rerun()
+    
+    # 當前設定摘要
+    st.markdown("### ⚙️ 當前設定")
+    
+    st.markdown(f'''
+    <div class="modern-card">
+        <div class="card-header">
+            <h3 class="card-title">您的投資組合設定</h3>
+            <div class="card-icon">🎯</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+            <div style="text-align: center;">
+                <div style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem;">{t['risk_preference']}</div>
+                <div style="color: #ffffff; font-weight: 600; font-size: 1.125rem;">
+                    {'保守型' if risk_pref == 'conservative' else '穩健型' if risk_pref == 'moderate' else '積極型'}
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <div style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem;">{t['investment_goal']}</div>
+                <div style="color: #ffffff; font-weight: 600; font-size: 1.125rem;">
+                    {'收益導向' if invest_goal == 'income' else '平衡配置' if invest_goal == 'balanced' else '成長導向'}
+                </div>
+            </div>
+        </div>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ====== 解決方案生成器 ======
+def show_solution_generator():
+    """顯示解決方案生成器"""
+    lang = st.session_state.language
+    t = TEXTS[lang]
+    
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div class="modern-card">
+        <div class="card-header">
+            <h1 class="card-title">⚡ {t['solution_generator']}</h1>
+            <div class="card-icon">🎯</div>
+        </div>
+        <p style="color: #94a3b8;">基於AI分析和專家洞察，為您生成個性化投資解決方案</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # 顯示生成的解決方案
+    if st.session_state.generated_solutions:
+        for i, solution in enumerate(st.session_state.generated_solutions):
+            st.markdown(f'''
+            <div class="solution-card">
+                <h2 class="solution-theme">🎯 {solution['theme']}</h2>
+                <div class="solution-insight">{solution['insight']}</div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: #ffffff; margin-bottom: 1rem;">💡 {t['expert_insights']}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                        <div style="text-align: center; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 12px;">
+                            <div style="color: #3b82f6; font-weight: 600; margin-bottom: 0.5rem;">市場機會</div>
+                            <div style="color: #10b981; font-weight: 600;">AI科技革命浪潮</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                            <div style="color: #f59e0b; font-weight: 600; margin-bottom: 0.5rem;">風險等級</div>
+                            <div style="color: #f59e0b; font-weight: 600;">中等風險</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 12px;">
+                            <div style="color: #8b5cf6; font-weight: 600; margin-bottom: 0.5rem;">建議時程</div>
+                            <div style="color: #8b5cf6; font-weight: 600;">6-12個月</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="color: #ffffff; margin-bottom: 1.5rem;">📊 {t['recommended_targets']}</h3>
+            </div>
+            ''', unsafe_allow_html=True)
+            
+            # 建議標的
+            st.markdown('<div class="target-grid">', unsafe_allow_html=True)
+            
+            for target in solution['targets']:
+                st.markdown(f'''
+                <div class="target-card">
+                    <div class="target-header">
+                        <div>
+                            <div class="target-symbol">{target['symbol']}</div>
+                            <div class="target-type">{target['type']}</div>
+                        </div>
+                        <div class="target-allocation">{target['allocation']}%</div>
+                    </div>
+                    <div class="target-analysis">{target['analysis']}</div>
+                    <div class="target-details">
+                        <div class="detail-item">
+                            <div class="detail-label">{t['entry_point']}</div>
+                            <div class="detail-value">{target['entry_point']}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">{t['exit_point']}</div>
+                            <div class="detail-value">{target['exit_point']}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">{t['expected_return']}</div>
+                            <div class="detail-value">{target['expected_return']}</div>
+                        </div>
+                    </div>
+                </div>
+                ''', unsafe_allow_html=True)
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # 行動計劃
+            st.markdown(f'''
+            <div class="solution-card">
+                <h3 style="color: #ffffff; margin-bottom: 1.5rem;">📋 {t['action_plan']}</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 1.5rem;">
+                        <div style="color: #ef4444; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>⚠️</span> 風險監控
+                        </div>
+                        <ul style="color: #cbd5e1; font-size: 0.9rem; margin: 0; padding-left: 1.2rem; line-height: 1.6;">
+                            {"".join([f"<li style='margin-bottom: 0.5rem;'>{risk}</li>" for risk in solution['risk_factors']])}
+                        </ul>
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.5rem;">
+                        <div style="color: #10b981; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📊</span> {t['monitoring_indicators']}
+                        </div>
+                        <ul style="color: #cbd5e1; font-size: 0.9rem; margin: 0; padding-left: 1.2rem; line-height: 1.6;">
+                            {"".join([f"<li style='margin-bottom: 0.5rem;'>{indicator}</li>" for indicator in solution['monitoring_indicators']])}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
+            
+            # 操作按鈕
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button(f"📌 {t['add_to_watchlist']}", use_container_width=True):
+                    st.success("✅ 已加入追蹤清單！")
+            
+            with col2:
+                if st.button(f"💼 加入虛擬組合", use_container_width=True):
+                    # 將解決方案標的加入虛擬投資組合
+                    for target in solution['targets']:
+                        portfolio_item = {
+                            'symbol': target['symbol'],
+                            'quantity': int(target['allocation'] * 100),  # 假設$10000總額
+                            'entry_price': np.random.uniform(100, 500),  # 模擬價格
+                            'current_price': np.random.uniform(100, 500),
+                            'entry_date': datetime.now()
+                        }
+                        st.session_state.virtual_portfolio.append(portfolio_item)
+                    
+                    st.success("✅ 已加入虛擬投資組合！")
+    
+    else:
+        st.markdown(f'''
+        <div class="modern-card">
+            <div style="text-align: center; padding: 3rem;">
+                <div style="font-size: 4rem; margin-bottom: 1.5rem;">🎯</div>
+                <h2 style="color: #ffffff; font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">
+                    尚無生成的投資解決方案
+                </h2>
+                <p style="color: #94a3b8; margin-bottom: 2rem; line-height: 1.6;">
+                    請先前往自動導航模式設定您的投資偏好，<br/>
+                    我們將為您生成專業的投資建議
+                </p>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        if st.button(f"🧭 前往自動導航設定", use_container_width=True, type="primary"):
+            st.session_state.current_page = 'auto_navigation'
+            st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ====== 虛擬投資組合 ======
+def show_virtual_portfolio():
+    """顯示虛擬投資組合"""
+    lang = st.session_state.language
+    t = TEXTS[lang]
+    
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div class="modern-card">
+        <div class="card-header">
+            <h1 class="card-title">💼 {t['virtual_portfolio']}</h1>
+            <div class="card-icon">📈</div>
+        </div>
+        <p style="color: #94a3b8;">無風險的虛擬交易環境，驗證您的投資策略</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # 組合績效總覽
+    if st.session_state.virtual_portfolio:
+        total_value = 0
+        total_cost = 0
+        
+        for item in st.session_state.virtual_portfolio:
+            total_value += item['quantity'] * item['current_price']
+            total_cost += item['quantity'] * item['entry_price']
+        
+        total_pnl = total_value - total_cost
+        total_return_pct = (total_pnl / total_cost * 100) if total_cost > 0 else 0
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.markdown(f'''
+            <div class="metric-card">
+                <div class="metric-label">組合價值</div>
+                <div class="metric-value">${total_value:,.0f}</div>
+                <div style="color: #94a3b8; font-size: 0.8rem;">投入成本: ${total_cost:,.0f}</div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        with col2:
+            pnl_class = "metric-positive" if total_pnl >= 0 else "metric-negative"
+            st.markdown(f'''
+            <div class="metric-card">
+                <div class="metric-label">{t['total_return']}</div>
+                <div class="metric-value {pnl_class}">${total_pnl:+,.0f}</div>
+                <div class="metric-change {pnl_class}">{total_return_pct:+.2f}%</div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        with col3:
+            win_count = sum(1 for item in st.session_state.virtual_portfolio if item['current_price'] > item['entry_price'])
+            win_rate = (win_count / len(st.session_state.virtual_portfolio)) * 100
+            st.markdown(f'''
+            <div class="metric-card">
+                <div class="metric-label">{t['win_rate']}</div>
+                <div class="metric-value">{win_rate:.1f}%</div>
+                <div style="color: #94a3b8; font-size: 0.8rem;">{win_count}/{len(st.session_state.virtual_portfolio)} 獲利</div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        with col4:
+            st.markdown(f'''
+            <div class="metric-card">
+                <div class="metric-label">持倉數量</div>
+                <div class="metric-value">{len(st.session_state.virtual_portfolio)}</div>
+                <div style="color: #94a3b8; font-size: 0.8rem;">檔標的</div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        # 持倉明細
+        st.markdown("### 📊 持倉明細")
+        
+        for item in st.session_state.virtual_portfolio:
+            pnl = (item['current_price'] - item['entry_price']) * item['quantity']
+            pnl_pct = ((item['current_price'] - item['entry_price']) / item['entry_price'] * 100) if item['entry_price'] > 0 else 0
+            pnl_color = "#10b981" if pnl >= 0 else "#ef4444"
+            
+            st.markdown(f'''
+            <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 1rem; align-items: center;">
+                <div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.1rem; color: #ffffff;">{item['symbol']}</div>
+                    <div style="color: #94a3b8; font-size: 0.85rem;">{item['quantity']} 股</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #ffffff; font-weight: 600;">${item['entry_price']:.2f}</div>
+                    <div style="color: #94a3b8; font-size: 0.8rem;">買入價</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #ffffff; font-weight: 600;">${item['current_price']:.2f}</div>
+                    <div style="color: #94a3b8; font-size: 0.8rem;">現價</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: {pnl_color};">${pnl:+,.0f}</div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: {pnl_color}; font-size: 0.85rem;">{pnl_pct:+.2f}%</div>
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        # 操作按鈕
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("🔄 更新價格", use_container_width=True):
+                # 模擬價格更新
+                for item in st.session_state.virtual_portfolio:
+                    change_pct = np.random.uniform(-0.05, 0.05)  # ±5% 隨機變化
+                    item['current_price'] *= (1 + change_pct)
+                st.success("✅ 價格已更新！")
+                st.rerun()
+        
+        with col2:
+            if st.button("📊 生成報告", use_container_width=True):
+                st.info("📄 績效報告功能開發中...")
+        
+        with col3:
+            if st.button("🗑️ 清空組合", use_container_width=True):
+                st.session_state.virtual_portfolio = []
+                st.success("✅ 虛擬組合已清空！")
+                st.rerun()
+    
+    else:
+        st.markdown(f'''
+        <div class="modern-card">
+            <div style="text-align: center; padding: 3rem;">
+                <div style="font-size: 4rem; margin-bottom: 1.5rem;">💼</div>
+                <h2 style="color: #ffffff; font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">
+                    您的虛擬投資組合是空的
+                </h2>
+                <p style="color: #94a3b8; margin-bottom: 2rem; line-height: 1.6;">
+                    透過解決方案生成器建立您的第一個投資組合，<br/>
+                    開始無風險的投資策略驗證
+                </p>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        if st.button(f"⚡ 前往解決方案生成器", use_container_width=True, type="primary"):
+            st.session_state.current_page = 'solution_generator'
+            st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ====== 訂閱管理 ======
+def show_subscription():
+    """顯示訂閱管理"""
+    lang = st.session_state.language
+    t = TEXTS[lang]
+    
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div class="modern-card">
+        <div class="card-header">
+            <h1 class="card-title">💳 {t['my_subscription']}</h1>
+            <div class="card-icon">⭐</div>
+        </div>
+        <p style="color: #94a3b8;">管理您的訂閱方案和付款設定</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # 訂閱狀態卡片
+    st.markdown(f'''
+    <div class="modern-card">
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 50px; font-size: 0.9rem; font-weight: 600; margin-bottom: 2rem;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite;"></div>
+            <span>訂閱有效</span>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0;">
+            <div style="text-align: center;">
+                <div style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem;">當前方案</div>
+                <div style="color: #ffffff; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">{t['monthly_plan']}</div>
+                <div style="color: #10b981; font-size: 0.8rem;">✅ 無限制使用所有功能</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem;">{t['next_billing']}</div>
+                <div style="color: #ffffff; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">2024年11月22日</div>
+                <div style="color: #94a3b8; font-size: 0.8rem;">自動續訂</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem;">{t['payment_method']}</div>
+                <div style="color: #ffffff; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">•••• •••• •••• 1234</div>
+                <div style="color: #94a3b8; font-size: 0.8rem;">Visa 信用卡</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <h3 style="color: #ffffff; margin-bottom: 1.5rem;">📋 訂閱功能</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <div style="color: #10b981; font-size: 1.2rem;">✅</div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem;">無限制解決方案生成</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <div style="color: #10b981; font-size: 1.2rem;">✅</div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem;">專家投資組合追蹤</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <div style="color: #10b981; font-size: 1.2rem;">✅</div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem;">即時市場數據推送</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <div style="color: #10b981; font-size: 1.2rem;">✅</div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem;">個性化投資建議</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <div style="color: #10b981; font-size: 1.2rem;">✅</div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem;">風險管理工具</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <div style="color: #10b981; font-size: 1.2rem;">✅</div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem;">24/7 客戶支援</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # 訂閱管理按鈕
+    st.markdown("### ⚙️ 訂閱管理")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("💳 更改付款方式", use_container_width=True):
+            st.info("🔄 付款方式更新功能開發中...")
+    
+    with col2:
+        if st.button("📧 修改帳單地址", use_container_width=True):
+            st.info("📝 帳單地址更新功能開發中...")
+    
+    with col3:
+        if st.button("❌ 取消訂閱", use_container_width=True):
+            if st.button("⚠️ 確認取消訂閱", use_container_width=True):
+                st.session_state.subscription_active = False
+                st.warning("⚠️ 訂閱已取消，您可以繼續使用到期日：2024年11月22日")
+    
+    # 使用統計
+    st.markdown("### 📊 使用統計")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown(f'''
+        <div class="metric-card">
+            <div class="metric-label">解決方案生成</div>
+            <div class="metric-value">23</div>
+            <div style="color: #94a3b8; font-size: 0.8rem;">本月使用次數</div>
+        </div>
+        ''', unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f'''
+        <div class="metric-card">
+            <div class="metric-label">投資組合追蹤</div>
+            <div class="metric-value">156</div>
+            <div style="color: #94a3b8; font-size: 0.8rem;">累計建立組合數</div>
+        </div>
+        ''', unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f'''
+        <div class="metric-card">
+            <div class="metric-label">平台使用</div>
+            <div class="metric-value">47</div>
+            <div style="color: #94a3b8; font-size: 0.8rem;">天（累計登入）</div>
+        </div>
+        ''', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ====== 設定頁面 ======
+def show_settings():
+    """顯示設定頁面"""
+    lang = st.session_state.language
+    t = TEXTS[lang]
+    
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div class="modern-card">
+        <div class="card-header">
+            <h1 class="card-title">⚙️ {t['settings']}</h1>
+            <div class="card-icon">🛠️</div>
+        </div>
+        <p style="color: #94a3b8;">個性化您的TENKI體驗設定</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # 語言設定
+    st.markdown("### 🌐 語言設定")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🇹🇼 繁體中文", 
+                     use_container_width=True,
+                     type="primary" if st.session_state.language == 'zh' else "secondary"):
+            st.session_state.language = 'zh'
+            st.rerun()
+    
+    with col2:
+        if st.button("🇺🇸 English", 
+                     use_container_width=True,
+                     type="primary" if st.session_state.language == 'en' else "secondary"):
+            st.session_state.language = 'en'
+            st.rerun()
+    
+    # 投資偏好
+    st.markdown("### 🎯 投資偏好")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        new_risk_pref = st.selectbox(
+            t['risk_preference'],
+            options=['conservative', 'moderate', 'aggressive'],
+            format_func=lambda x: {'conservative': t['conservative'], 'moderate': t['moderate'], 'aggressive': t['aggressive']}[x],
+            index=['conservative', 'moderate', 'aggressive'].index(st.session_state.risk_preference)
+        )
+    
+    with col2:
+        new_invest_goal = st.selectbox(
+            t['investment_goal'],
+            options=['income', 'balanced', 'growth'],
+            format_func=lambda x: {'income': t['income'], 'balanced': t['balanced'], 'growth': t['growth']}[x],
+            index=['income', 'balanced', 'growth'].index(st.session_state.investment_goal)
+        )
+    
+    if st.button("💾 儲存設定", use_container_width=True, type="primary"):
+        st.session_state.risk_preference = new_risk_pref
+        st.session_state.investment_goal = new_invest_goal
+        st.success("✅ 設定已儲存！")
+    
+    # 通知設定
+    st.markdown("### 🔔 通知設定")
+    
+    notification_email = st.checkbox("📧 電子郵件通知", value=True)
+    notification_push = st.checkbox("📱 推播通知", value=True)
+    notification_sms = st.checkbox("📞 簡訊通知", value=False)
+    
+    # 資料管理
+    st.markdown("### 📊 資料管理")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("📤 匯出資料", use_container_width=True):
+            st.info("📄 資料匯出功能開發中...")
+    
+    with col2:
+        if st.button("🗑️ 清除快取", use_container_width=True):
+            st.cache_data.clear()
+            st.success("✅ 快取已清除！")
+    
+    with col3:
+        if st.button("🔄 重設APP", use_container_width=True):
+            if st.button("⚠️ 確認重設", use_container_width=True):
+                # 重設所有session state
+                for key in list(st.session_state.keys()):
+                    if key != 'user_logged_in' and key != 'current_page':
+                        del st.session_state[key]
+                st.success("✅ APP已重設！")
+                st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ====== 主應用程式 ======
+def main():
+    """TENKI主應用程式"""
+    
+    # 載入修正後的設計系統
+    load_fixed_tenki_design()
+    
+    # 路由系統
+    if st.session_state.current_page == 'landing':
+        show_landing_page()
+    elif st.session_state.current_page == 'login':
+        show_login_page()
+    elif st.session_state.user_logged_in:
+        # 顯示導航
+        create_navigation()
+        
+        # 根據當前頁面顯示相應內容
+        if st.session_state.current_page == 'dashboard':
+            show_dashboard()
+        elif st.session_state.current_page == 'auto_navigation':
+            show_auto_navigation()
+        elif st.session_state.current_page == 'solution_generator':
+            show_solution_generator()
+        elif st.session_state.current_page == 'virtual_portfolio':
+            show_virtual_portfolio()
+        elif st.session_state.current_page == 'subscription':
+            show_subscription()
+        elif st.session_state.current_page == 'settings':
+            show_settings()
+        else:
+            show_dashboard()
+    else:
+        # 未登入用戶預設返回landing page
+        st.session_state.current_page = 'landing'
+        show_landing_page()
+    
+    # 頁面底部免責聲明
+    if st.session_state.user_logged_in:
+        lang = st.session_state.language
+        t = TEXTS[lang]
+        
+        st.markdown(f'''
+        <div class="disclaimer">
+            <span class="disclaimer-icon">⚠️</span>
+            {t['disclaimer']}
+        </div>
+        ''', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
