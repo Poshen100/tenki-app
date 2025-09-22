@@ -62,6 +62,10 @@ TEXTS = {
         "refresh": "刷新數據",
         "market_open": "開市中",
         "market_closed": "休市中",
+        "market_active": "交易中",
+        "market_maintenance": "維護中",
+        "market_weekend": "休市",
+        "market_unknown": "狀態未知",
         "auto_refresh": "自動刷新",
         "manual_refresh": "手動刷新",
         "trading_volume": "交易量",
@@ -100,6 +104,10 @@ TEXTS = {
         "refresh": "Refresh Data",
         "market_open": "Market Open",
         "market_closed": "Market Closed",
+        "market_active": "Active",
+        "market_maintenance": "Maintenance",
+        "market_weekend": "Weekend",
+        "market_unknown": "Unknown",
         "auto_refresh": "Auto Refresh",
         "manual_refresh": "Manual Refresh",
         "trading_volume": "Trading Volume",
@@ -138,6 +146,10 @@ TEXTS = {
         "refresh": "データを更新",
         "market_open": "市場オープン",
         "market_closed": "市場クローズ",
+        "market_active": "取引中",
+        "market_maintenance": "メンテナンス",
+        "market_weekend": "休日",
+        "market_unknown": "状態不明",
         "auto_refresh": "自動更新",
         "manual_refresh": "手動更新",
         "trading_volume": "取引量",
@@ -478,59 +490,60 @@ def get_professional_stocks_data():
         
     return stocks_data[:15]
 
-# ====== 頂級UI/UX設計系統 ======
-def load_premium_design_system():
-    """載入頂級設計系統"""
+# ====== 修正後的頂級設計系統 - 高對比度優化 ======
+def load_high_contrast_design_system():
+    """載入高對比度優化的設計系統"""
     
     logo_config = load_optimal_logo()
     logo_data = logo_config['data'] if logo_config else None
     
     st.markdown(f"""
     <style>
-        /* ========== 頂級字體與基礎設定 ========== */
+        /* ========== 基礎字體與高對比配色 ========== */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@100;200;300;400;500;600;700;800;900&display=swap');
         
         :root {{
-            /* Color System - Professional Trading Theme */
-            --primary-900: #0c1220;
-            --primary-800: #1e293b;
-            --primary-700: #334155;
-            --primary-600: #475569;
-            --primary-500: #64748b;
-            --primary-400: #94a3b8;
-            --primary-300: #cbd5e1;
-            --primary-200: #e2e8f0;
-            --primary-100: #f1f5f9;
+            /* 高對比度色彩系統 */
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --bg-hover: #475569;
             
-            /* Accent Colors */
-            --accent-blue: #3b82f6;
-            --accent-blue-dark: #1d4ed8;
-            --accent-purple: #8b5cf6;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-amber: #f59e0b;
+            /* 高對比文字顏色 */
+            --text-primary: #ffffff;          /* 純白 - 最高對比 */
+            --text-secondary: #f1f5f9;       /* 近白 - 次級文字 */
+            --text-tertiary: #e2e8f0;        /* 淺灰 - 標籤文字 */
+            --text-muted: #cbd5e1;           /* 中灰 - 輔助文字 */
+            --text-subtle: #94a3b8;          /* 深灰 - 次要信息 */
             
-            /* Gradients */
-            --gradient-primary: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-800) 50%, var(--primary-700) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-dark) 50%, var(--accent-purple) 100%);
-            --gradient-success: linear-gradient(135deg, #059669 0%, var(--accent-green) 100%);
-            --gradient-danger: linear-gradient(135deg, #dc2626 0%, var(--accent-red) 100%);
+            /* 強化的狀態顏色 - 更高飽和度 */
+            --color-success: #22c55e;         /* 鮮綠 - 上漲 */
+            --color-danger: #ef4444;          /* 鮮紅 - 下跌 */
+            --color-warning: #f59e0b;         /* 橙黃 - 警告 */
+            --color-info: #3b82f6;            /* 藍色 - 信息 */
+            --color-purple: #a855f7;          /* 紫色 - 強調 */
             
-            /* Typography Scale */
-            --text-xs: 0.75rem;
-            --text-sm: 0.875rem;
-            --text-base: 1rem;
-            --text-lg: 1.125rem;
-            --text-xl: 1.25rem;
-            --text-2xl: 1.5rem;
-            --text-3xl: 1.875rem;
-            --text-4xl: 2.25rem;
-            --text-5xl: 3rem;
-            --text-6xl: 3.75rem;
+            /* 增強對比的成功和危險色 */
+            --success-bg: rgba(34, 197, 94, 0.2);
+            --success-border: rgba(34, 197, 94, 0.4);
+            --danger-bg: rgba(239, 68, 68, 0.2);
+            --danger-border: rgba(239, 68, 68, 0.4);
             
-            /* Spacing Scale */
+            /* 漸變系統 */
+            --gradient-primary: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            --gradient-card: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-info) 0%, var(--color-purple) 100%);
+            
+            /* 陰影系統 */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            
+            /* 間距系統 */
             --space-1: 0.25rem;
             --space-2: 0.5rem;
             --space-3: 0.75rem;
@@ -542,38 +555,16 @@ def load_premium_design_system():
             --space-12: 3rem;
             --space-16: 4rem;
             --space-20: 5rem;
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-            
-            /* Trading Specific */
-            --price-positive: #10b981;
-            --price-negative: #ef4444;
-            --price-neutral: #64748b;
-            --volume-high: #3b82f6;
-            --volume-medium: #8b5cf6;
-            --volume-low: #64748b;
-            
-            /* Animation Timing */
-            --timing-fast: 150ms;
-            --timing-normal: 250ms;
-            --timing-slow: 350ms;
-            --easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
-            --easing-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
-            --easing-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
         }}
         
-        /* ========== 基礎重置與布局 ========== */
+        /* ========== 基礎重置 ========== */
         .main .block-container {{
             padding: 0 !important;
             margin: 0 !important;
             max-width: 100% !important;
             background: var(--gradient-primary);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-primary);
         }}
         
         #MainMenu, footer, header, .stDeployButton, .stDecoration {{
@@ -588,7 +579,7 @@ def load_premium_design_system():
             overflow-x: hidden;
         }}
         
-        /* ========== 進階背景系統 ========== */
+        /* ========== 優化的背景系統 ========== */
         .stApp::before {{
             content: '';
             position: fixed;
@@ -597,12 +588,11 @@ def load_premium_design_system():
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.02) 0%, transparent 70%);
+                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.02) 0%, transparent 70%);
             z-index: 0;
             pointer-events: none;
-            animation: ambient-flow 20s ease-in-out infinite;
         }}
         
         .stApp::after {{
@@ -614,32 +604,27 @@ def load_premium_design_system():
             font-family: 'Orbitron', monospace;
             font-size: clamp(4rem, 12vw, 8rem);
             font-weight: 900;
-            color: rgba(59, 130, 246, 0.02);
+            color: rgba(59, 130, 246, 0.025);
             z-index: 1;
             pointer-events: none;
             text-shadow: 0 0 100px rgba(59, 130, 246, 0.05);
             letter-spacing: 0.2em;
         }}
         
-        @keyframes ambient-flow {{
-            0%, 100% {{ opacity: 0.6; transform: scale(1) rotate(0deg); }}
-            50% {{ opacity: 1; transform: scale(1.05) rotate(1deg); }}
-        }}
-        
         /* ========== 主內容區域 ========== */
         .main-content {{
             padding: var(--space-6);
             background: transparent;
-            color: var(--primary-100);
+            color: var(--text-primary);
             position: relative;
             z-index: 10;
         }}
         
-        /* ========== 頂級品牌展示系統 ========== */
+        /* ========== 品牌展示區域 ========== */
         .hero-brand-section {{
-            background: var(--gradient-primary);
+            background: var(--gradient-card);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             border-radius: 24px;
             padding: var(--space-12) var(--space-8);
             margin-bottom: var(--space-10);
@@ -656,11 +641,10 @@ def load_premium_design_system():
             right: 0;
             height: 4px;
             background: var(--gradient-accent);
-            opacity: 0.8;
-            animation: brand-pulse 3s ease-in-out infinite;
+            animation: brand-glow 3s ease-in-out infinite;
         }}
         
-        @keyframes brand-pulse {{
+        @keyframes brand-glow {{
             0%, 100% {{ opacity: 0.6; }}
             50% {{ opacity: 1; }}
         }}
@@ -672,22 +656,18 @@ def load_premium_design_system():
             align-items: center;
         }}
         
-        /* Logo展示系統 */
+        /* Logo展示優化 */
         .logo-showcase {{
             position: relative;
             width: 280px;
             height: 280px;
             border-radius: 50%;
-            background: 
-                radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%),
-                var(--gradient-primary);
-            border: 3px solid rgba(59, 130, 246, 0.2);
+            background: var(--gradient-card);
+            border: 3px solid rgba(59, 130, 246, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 
-                var(--shadow-2xl),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-2xl);
             overflow: hidden;
         }}
         
@@ -702,11 +682,11 @@ def load_premium_design_system():
                 from 0deg,
                 transparent,
                 rgba(59, 130, 246, 0.1),
-                rgba(139, 92, 246, 0.1),
-                rgba(16, 185, 129, 0.1),
+                rgba(168, 85, 247, 0.1),
+                rgba(34, 197, 94, 0.1),
                 transparent
             );
-            animation: logo-rotate 8s linear infinite;
+            animation: logo-spin 8s linear infinite;
             z-index: 1;
         }}
         
@@ -717,40 +697,40 @@ def load_premium_design_system():
             max-height: 240px;
             border-radius: 50%;
             box-shadow: var(--shadow-xl);
-            transition: transform var(--timing-normal) var(--easing-standard);
+            transition: transform 0.3s ease;
         }}
         
         .logo-showcase:hover .logo-image {{
             transform: scale(1.05);
         }}
         
-        @keyframes logo-rotate {{
+        @keyframes logo-spin {{
             0% {{ transform: rotate(0deg); }}
             100% {{ transform: rotate(360deg); }}
         }}
         
-        /* 品牌文字系統 */
+        /* 品牌文字優化 - 高對比 */
         .brand-text {{
             text-align: left;
         }}
         
         .brand-title {{
             font-family: 'Orbitron', monospace;
-            font-size: clamp(var(--text-4xl), 8vw, var(--text-6xl));
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 900;
-            background: linear-gradient(135deg, var(--primary-100) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--color-info) 50%, var(--color-purple) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: var(--space-3);
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             letter-spacing: -0.02em;
             line-height: 1.1;
         }}
         
         .brand-subtitle {{
-            font-size: var(--text-lg);
-            color: var(--primary-300);
+            font-size: 1.25rem;
+            color: var(--text-secondary);
             margin-bottom: var(--space-2);
             font-weight: 400;
             font-style: italic;
@@ -758,14 +738,14 @@ def load_premium_design_system():
         }}
         
         .brand-tagline {{
-            font-size: var(--text-base);
-            color: var(--primary-400);
+            font-size: 1rem;
+            color: var(--text-tertiary);
             margin-bottom: var(--space-6);
             font-weight: 500;
             line-height: 1.6;
         }}
         
-        /* 市場狀態系統 */
+        /* 市場狀態優化 */
         .market-status-container {{
             display: flex;
             flex-direction: column;
@@ -778,27 +758,26 @@ def load_premium_design_system():
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-3) var(--space-5);
-            background: rgba(16, 185, 129, 0.15);
-            border: 2px solid rgba(16, 185, 129, 0.3);
+            background: var(--success-bg);
+            border: 2px solid var(--success-border);
             border-radius: 50px;
-            font-size: var(--text-sm);
-            font-weight: 600;
-            color: #6ee7b7;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-success);
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-lg);
-            transition: all var(--timing-normal) var(--easing-standard);
         }}
         
         .market-status.closed {{
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
+            background: var(--danger-bg);
+            border-color: var(--danger-border);
+            color: var(--color-danger);
         }}
         
         .market-status.maintenance {{
-            background: rgba(245, 158, 11, 0.15);
-            border-color: rgba(245, 158, 11, 0.3);
-            color: #fcd34d;
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.4);
+            color: var(--color-warning);
         }}
         
         .status-indicator {{
@@ -811,32 +790,25 @@ def load_premium_design_system():
         }}
         
         @keyframes status-pulse {{
-            0%, 100% {{ 
-                opacity: 1; 
-                transform: scale(1); 
-                box-shadow: 0 0 10px currentColor;
-            }}
-            50% {{ 
-                opacity: 0.7; 
-                transform: scale(1.2); 
-                box-shadow: 0 0 20px currentColor;
-            }}
+            0%, 100% {{ opacity: 1; transform: scale(1); }}
+            50% {{ opacity: 0.7; transform: scale(1.2); }}
         }}
         
         .last-update {{
-            font-size: var(--text-xs);
-            color: var(--primary-400);
+            font-size: 0.75rem;
+            color: var(--text-muted);
             font-family: 'JetBrains Mono', monospace;
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(30, 41, 59, 0.9);
             padding: var(--space-2) var(--space-3);
             border-radius: 8px;
             backdrop-filter: blur(5px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
         }}
         
-        /* ========== 專業交易區域系統 ========== */
+        /* ========== 交易區域標題優化 ========== */
         .trading-section-header {{
-            background: var(--gradient-primary);
-            border: 1px solid rgba(148, 163, 184, 0.15);
+            background: var(--gradient-card);
+            border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 16px;
             padding: var(--space-5) var(--space-6);
             margin: var(--space-8) 0 var(--space-4) 0;
@@ -863,22 +835,22 @@ def load_premium_design_system():
         }}
         
         .trading-section-title {{
-            font-size: var(--text-xl);
+            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--primary-100);
+            color: var(--text-primary);
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
             letter-spacing: 0.05em;
         }}
         
-        /* ========== 進階數據卡片系統 ========== */
+        /* ========== 高對比數據卡片 ========== */
         div[data-testid="metric-container"] {{
-            background: var(--gradient-primary) !important;
-            border: 1px solid rgba(148, 163, 184, 0.12) !important;
+            background: var(--gradient-card) !important;
+            border: 1px solid rgba(148, 163, 184, 0.15) !important;
             border-radius: 20px !important;
             padding: var(--space-6) !important;
             box-shadow: var(--shadow-xl) !important;
-            transition: all var(--timing-normal) var(--easing-standard) !important;
+            transition: all 0.3s ease !important;
             position: relative !important;
             overflow: hidden !important;
             backdrop-filter: blur(10px) !important;
@@ -892,21 +864,18 @@ def load_premium_design_system():
             right: 0 !important;
             height: 3px !important;
             background: var(--gradient-accent) !important;
-            opacity: 0.8 !important;
         }}
         
         div[data-testid="metric-container"]:hover {{
             transform: translateY(-8px) scale(1.02) !important;
-            box-shadow: 
-                var(--shadow-2xl),
-                0 0 30px rgba(59, 130, 246, 0.2) !important;
-            border-color: rgba(59, 130, 246, 0.3) !important;
+            box-shadow: var(--shadow-2xl), 0 0 30px rgba(59, 130, 246, 0.3) !important;
+            border-color: rgba(59, 130, 246, 0.4) !important;
         }}
         
-        /* 數據標籤優化 */
+        /* 高對比標籤 */
         div[data-testid="metric-container"] label {{
-            color: var(--primary-300) !important;
-            font-size: var(--text-xs) !important;
+            color: var(--text-secondary) !important;
+            font-size: 0.75rem !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
             letter-spacing: 1.5px !important;
@@ -914,32 +883,33 @@ def load_premium_design_system():
             font-family: 'Inter', sans-serif !important;
         }}
         
-        /* 數據值優化 */
+        /* 高對比數據值 */
         div[data-testid="metric-container"] > div > div {{
-            color: var(--primary-100) !important;
+            color: var(--text-primary) !important;
             font-weight: 800 !important;
-            font-size: var(--text-2xl) !important;
+            font-size: 1.5rem !important;
             font-family: 'JetBrains Mono', monospace !important;
             line-height: 1.2 !important;
             margin-bottom: var(--space-2) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
         }}
         
-        /* 變化量優化 */
+        /* 高對比變化量 */
         div[data-testid="metric-container"] div[data-testid="stMetricDelta"] {{
             font-weight: 700 !important;
-            font-size: var(--text-sm) !important;
+            font-size: 0.875rem !important;
             font-family: 'JetBrains Mono', monospace !important;
         }}
         
-        /* ========== 專業股票卡片系統 ========== */
+        /* ========== 股票卡片高對比優化 ========== */
         .stock-card-professional {{
-            background: var(--gradient-primary);
-            border: 1px solid rgba(148, 163, 184, 0.12);
+            background: var(--gradient-card);
+            border: 1px solid rgba(148, 163, 184, 0.15);
             border-radius: 20px;
             padding: var(--space-6);
             margin: var(--space-4) 0;
             box-shadow: var(--shadow-xl);
-            transition: all var(--timing-normal) var(--easing-standard);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
@@ -947,10 +917,8 @@ def load_premium_design_system():
         
         .stock-card-professional:hover {{
             transform: translateY(-4px);
-            box-shadow: 
-                var(--shadow-2xl),
-                0 0 25px rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.25);
+            box-shadow: var(--shadow-2xl), 0 0 25px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
         }}
         
         .stock-card-professional::before {{
@@ -970,9 +938,9 @@ def load_premium_design_system():
             min-width: 32px;
             height: 32px;
             background: var(--gradient-accent);
-            color: white;
+            color: var(--text-primary);
             border-radius: 50%;
-            font-size: var(--text-sm);
+            font-size: 0.875rem;
             font-weight: 800;
             margin-bottom: var(--space-4);
             box-shadow: var(--shadow-md);
@@ -980,22 +948,22 @@ def load_premium_design_system():
         
         .stock-symbol {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: var(--text-lg);
+            font-size: 1.125rem;
             font-weight: 800;
-            color: var(--primary-100);
+            color: var(--text-primary);
             margin-bottom: var(--space-1);
         }}
         
         .stock-name {{
-            font-size: var(--text-sm);
-            color: var(--primary-300);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
             margin-bottom: var(--space-1);
             line-height: 1.4;
         }}
         
         .stock-sector {{
-            font-size: var(--text-xs);
-            color: var(--primary-400);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
             margin-bottom: var(--space-4);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -1003,28 +971,31 @@ def load_premium_design_system():
         
         .stock-price {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: var(--text-xl);
+            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--primary-100);
+            color: var(--text-primary);
             margin-bottom: var(--space-2);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }}
         
         .price-change {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: var(--text-sm);
-            font-weight: 600;
+            font-size: 0.875rem;
+            font-weight: 700;
         }}
         
         .price-positive {{
-            color: var(--price-positive);
+            color: var(--color-success) !important;
+            text-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
         }}
         
         .price-negative {{
-            color: var(--price-negative);
+            color: var(--color-danger) !important;
+            text-shadow: 0 0 5px rgba(239, 68, 68, 0.3);
         }}
         
         .price-neutral {{
-            color: var(--price-neutral);
+            color: var(--text-muted) !important;
         }}
         
         .stock-metrics {{
@@ -1033,7 +1004,7 @@ def load_premium_design_system():
             gap: var(--space-3);
             margin-top: var(--space-4);
             padding-top: var(--space-4);
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
         }}
         
         .metric-item {{
@@ -1042,25 +1013,26 @@ def load_premium_design_system():
         }}
         
         .metric-label {{
-            font-size: var(--text-xs);
-            color: var(--primary-400);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: var(--space-1);
+            font-weight: 600;
         }}
         
         .metric-value {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: var(--text-sm);
+            font-size: 0.875rem;
             font-weight: 600;
-            color: var(--primary-200);
+            color: var(--text-secondary);
         }}
         
-        /* ========== 控制面板系統 ========== */
+        /* ========== 控制面板優化 ========== */
         .control-panel {{
             background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(148, 163, 184, 0.15);
+            border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 20px;
             padding: var(--space-6);
             margin: var(--space-6) 0;
@@ -1070,13 +1042,13 @@ def load_premium_design_system():
         .timestamp-display {{
             text-align: center;
             font-family: 'JetBrains Mono', monospace;
-            font-size: var(--text-sm);
-            color: var(--primary-300);
-            background: rgba(15, 23, 42, 0.8);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            background: rgba(15, 23, 42, 0.9);
             padding: var(--space-3) var(--space-4);
             border-radius: 12px;
             margin: var(--space-4) 0;
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.15);
             backdrop-filter: blur(5px);
         }}
         
@@ -1144,7 +1116,7 @@ def load_premium_design_system():
             }}
             
             div[data-testid="metric-container"] > div > div {{
-                font-size: var(--text-lg) !important;
+                font-size: 1.125rem !important;
             }}
         }}
     </style>
@@ -1200,12 +1172,13 @@ def create_premium_brand_hero():
     
     # 市場狀態與控制
     market_status = get_advanced_market_status()
+    status_text = t.get(f"market_{market_status['status']}", "狀態未知")
     
     st.markdown(f'''
     <div class="market-status-container">
         <div class="market-status {market_status['status']}">
             <div class="status-indicator"></div>
-            <span>{market_status['icon']} {t.get(f"market_{market_status['status']}", "市場狀態")}</span>
+            <span>{market_status['icon']} {status_text}</span>
         </div>
         <div class="last-update">
             {t['last_update']}: {datetime.now().strftime("%H:%M:%S")}
@@ -1234,7 +1207,6 @@ def create_professional_trading_section(title, data, t, section_type="default"):
         for i, (symbol, info) in enumerate(data.items()):
             if i < len(cols):
                 with cols[i]:
-                    # 期貨專業顯示
                     display_name = info.get('display_name', symbol)
                     delta_str = f"{info['change']:+.2f} ({info['change_pct']:+.2f}%)"
                     
@@ -1288,14 +1260,13 @@ def create_professional_stocks_display(stocks_data, t):
         st.warning(f"{t['loading']} {t['hot_stocks']}")
         return
     
-    # 使用兩欄佈局提高信息密度
+    # 使用兩欄佈局
     col1, col2 = st.columns(2)
     
     for i, stock in enumerate(stocks_data[:12]):
         target_col = col1 if i % 2 == 0 else col2
         
         with target_col:
-            # 計算價格變化的樣式類
             change_class = "price-positive" if stock['change'] >= 0 else "price-negative"
             
             # 格式化數據
@@ -1360,7 +1331,7 @@ def get_localized_name(symbol, t):
     return name_mapping.get(symbol, symbol)
 
 def create_premium_language_selector(t):
-    """創建頂級語言選擇器"""
+    """創建語言選擇器"""
     st.markdown(f'''
     <div class="trading-section-header">
         <h2 class="trading-section-title">🌐 {t["language"]}</h2>
@@ -1421,14 +1392,14 @@ def create_control_panel(t):
 # ====== 主應用程式 ======
 def main():
     """主應用程式入口"""
-    # 載入頂級設計系統
-    load_premium_design_system()
+    # 載入高對比度設計系統
+    load_high_contrast_design_system()
     
     # 獲取語言設定
     lang = st.session_state.language
     t = TEXTS[lang]
     
-    # 創建頂級品牌展示
+    # 創建品牌展示
     create_premium_brand_hero()
     
     # 語言選擇器
@@ -1458,7 +1429,7 @@ def main():
     # 加密貨幣區域
     create_professional_trading_section(t['cryptocurrencies'], crypto_data, t, "crypto")
     
-    # 多資產區域 (外匯、商品、債券)
+    # 多資產區域
     forex_data = {k: v for k, v in multi_asset_data.items() if v['type'] == 'forex'}
     commodity_data = {k: v for k, v in multi_asset_data.items() if v['type'] == 'commodity'}
     bond_data = {k: v for k, v in multi_asset_data.items() if v['type'] == 'bond'}
@@ -1473,25 +1444,25 @@ def main():
     # 專業股票展示
     create_professional_stocks_display(stocks_data, t)
     
-    # 頂級頁腳
+    # 修正後的頁腳
     st.markdown(f'''
     <div style="
         text-align: center; 
         padding: var(--space-10) var(--space-6); 
         margin-top: var(--space-12);
-        background: var(--gradient-primary);
-        border-top: 2px solid rgba(59, 130, 246, 0.15);
+        background: var(--gradient-card);
+        border-top: 2px solid rgba(59, 130, 246, 0.2);
         border-radius: 24px;
         backdrop-filter: blur(20px);
         box-shadow: var(--shadow-2xl);
     ">
         <div style="
             font-family: 'Orbitron', monospace;
-            font-size: var(--text-2xl); 
+            font-size: 1.5rem; 
             font-weight: 800; 
             margin-bottom: var(--space-3); 
-            color: var(--primary-100);
-            background: linear-gradient(135deg, var(--primary-100) 0%, var(--accent-blue) 100%);
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--color-info) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1500,8 +1471,8 @@ def main():
         </div>
         
         <div style="
-            font-size: var(--text-base); 
-            color: var(--primary-300); 
+            font-size: 1rem; 
+            color: var(--text-secondary); 
             margin-bottom: var(--space-4);
             font-style: italic;
         ">
@@ -1509,23 +1480,23 @@ def main():
         </div>
         
         <div style="
-            font-size: var(--text-sm); 
-            color: var(--primary-400); 
+            font-size: 0.875rem; 
+            color: var(--text-tertiary); 
             margin-bottom: var(--space-2);
         ">
-            © 2025 TENKI • Powered by Advanced Financial Data Systems
+            © 2025 TENKI • 高對比度優化版本 • 專業交易平台
         </div>
         
         <div style="
-            font-size: var(--text-xs); 
-            color: var(--primary-500); 
+            font-size: 0.75rem; 
+            color: var(--text-muted); 
             line-height: 1.6;
             max-width: 600px;
             margin: 0 auto;
         ">
-            頂級UI/UX設計 • Logo完美整合 • TradingView數據同步 • 企業級專業交易平台<br>
-            Professional Trading Interface • Real-Time Market Data • Investment Advisory Tool<br>
-            <strong>風險提示</strong>：本平台僅供投資參考，所有投資決策風險自負
+            Logo完美整合 • TradingView數據同步 • 高對比度可讀性優化<br>
+            Professional Trading Interface • Real-Time Market Data<br>
+            <strong style="color: var(--color-warning);">風險提示</strong>：本平台僅供投資參考，所有投資決策風險自負
         </div>
     </div>
     </div>
