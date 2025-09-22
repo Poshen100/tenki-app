@@ -1101,28 +1101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-# 精準的期貨代碼映射 - 對標TradingView
-futures_symbols = {
-    'ES': {
-        'primary': 'ES=F',      # E-mini S&P 500期貨
-        'backup': '^GSPC',      # S&P 500指數  
-        'name': 'ES1!'          # 顯示為TradingView格式
-    },
-    'NQ': {
-        'primary': 'NQ=F',      # E-mini NASDAQ期貨
-        'backup': '^IXIC',      # NASDAQ指數
-        'name': 'NQ1!'          # 顯示為TradingView格式
-    },
-    'YM': {
-        'primary': 'YM=F',      # E-mini Dow期貨
-        'backup': '^DJI',       # 道瓊指數
-        'name': 'YM1!'          # 顯示為TradingView格式
-    }
-}
-
-# 精準的數據獲取邏輯
-def fetch_precise_futures(symbol_key, symbol_info):
-    # 優先使用期貨合約 ES=F, NQ=F, YM=F
-    # 獲取實時分鐘數據
-    # 使用previousClose作為準確基準
-    # 確保數據與TradingView一致
